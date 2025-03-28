@@ -1,0 +1,23 @@
+name: Validate Rust
+on:
+  push:
+    branches:
+      - '*'
+env:
+  HUSKY: 0
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rust-code-validation:
+    name: Rust code validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate cargo
+        run: |
+          cargo update
+          cargo check
