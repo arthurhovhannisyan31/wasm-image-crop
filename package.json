@@ -10,9 +10,10 @@
     "serve": "nodemon -r dotenv/config --config configs/nodemon-prod.json server.js",
     "build": "./configs/scripts/build.sh",
     "build:fe": "__PROD__=true webpack --config configs/webpack/webpack.prod.js",
-    "prepare": "corepack install",
+    "prepare": "corepack install && husky",
     "lint": "yarn eslint '**/*.{js,ts,tsx}' --cache --quiet",
-    "lint:fix": "yarn lint:warn --fix",
+    "lint:warn": "yarn lint --max-warnings 100",
+    "lint:staged": "./configs/scripts/lint-staged.sh",
     "types": "NODE_OPTIONS=--max-old-space-size=8196 tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
