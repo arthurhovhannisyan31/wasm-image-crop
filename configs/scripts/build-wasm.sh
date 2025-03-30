@@ -3,7 +3,7 @@
 if ! which wasm-pack; then
   echo Init rustup
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -sSf | sh -s -- -y
-  sudo . $HOME/.cargo/env
+  . $HOME/.cargo/env
 
   echo Init wasm-pack
   curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh

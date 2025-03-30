@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 
-type WasmModule = typeof import("wasm-pkg");
+type WasmModule = typeof import("../../../wasm-pkg");
 
-export const useInitWasm = (): WasmModule | undefined => {
+export const useInitWasm = () => {
   const [wasmModule, setWasmModule] = useState<WasmModule>();
 
   useEffect(() => {
-    async function loadWasm() {
+    async function loadWasm(): Promise<void> {
       try {
-        const wasm = await import("wasm-pkg") as unknown as WasmModule;
+        const wasm = await import("../../../wasm-pkg") as unknown as WasmModule;
         if (wasm) {
           setWasmModule(wasm);
         }
