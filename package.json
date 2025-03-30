@@ -1,18 +1,20 @@
 {
-  "name": "hello-wasm",
+  "name": "wasm-image-crop",
   "packageManager": "yarn@4.7.0",
   "engines": {
     "node": "^22.9.0"
   },
   "scripts": {
+    "build": "yarn build:rs && yarn build:fe",
+    "build:rs": "configs/scripts/build-wasm.sh",
+    "build:fe": "__PROD__=true webpack --config configs/webpack/webpack.prod.js",
     "dev": "webpack serve --config configs/webpack/webpack.dev.js",
     "watch:rs": "nodemon --polling-interval 500 -e rs --exec \"wasm-pack build --out-dir wasm-pkg\"",
     "serve": "nodemon -r dotenv/config --config configs/nodemon-prod.json server.js",
-    "build": "./configs/scripts/build.sh",
-    "build:fe": "__PROD__=true webpack --config configs/webpack/webpack.prod.js",
-    "prepare": "corepack install",
+    "prepare": "corepack install && husky",
     "lint": "yarn eslint '**/*.{js,ts,tsx}' --cache --quiet",
-    "lint:fix": "yarn lint:warn --fix",
+    "lint:warn": "yarn lint --max-warnings 100",
+    "lint:staged": "./configs/scripts/lint-staged.sh",
     "types": "NODE_OPTIONS=--max-old-space-size=8196 tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
@@ -26,8 +28,7 @@
     "@mui/system": "^6.4.6",
     "@mui/types": "^7.2.21",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "wasm-pkg": "file:./wasm-pkg"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.26.4",

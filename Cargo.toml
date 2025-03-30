@@ -1,5 +1,5 @@
 [package]
-name = "hello-wasm"
+name = "wasm-image-crop"
 version = "0.1.0"
 authors = ["Arthur Hovhannisyan <arthurhovhannisyan31@gmail.com>"]
 edition = "2024"

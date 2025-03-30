@@ -1,9 +1,6 @@
 #rust
 /target
 **/*.rs.bk
-bin/
-pkg/
-wasm-pack.log
 
 #web
 .yarn/*
@@ -18,11 +15,7 @@ wasm-pack.log
 
 # packages
 /node_modules
-
 /dist
-
-# env files
-*.env*
 
 # eslint
 .eslintcache

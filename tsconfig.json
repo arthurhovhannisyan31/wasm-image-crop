@@ -14,7 +14,8 @@
     "moduleResolution": "node",
     "jsx": "preserve",
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "./web/typings"
     ]
   },
   "include": [
