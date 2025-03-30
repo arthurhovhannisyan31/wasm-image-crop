@@ -1,5 +1,9 @@
+/* eslint import/no-unresolved: 0 */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import { useEffect, useState } from "react";
 
+// @ts-ignore
 type WasmModule = typeof import("../../../wasm-pkg");
 
 export const useInitWasm = () => {
@@ -8,7 +12,9 @@ export const useInitWasm = () => {
   useEffect(() => {
     async function loadWasm(): Promise<void> {
       try {
+        // @ts-ignore
         const wasm = await import("../../../wasm-pkg") as unknown as WasmModule;
+
         if (wasm) {
           setWasmModule(wasm);
         }
@@ -22,3 +28,4 @@ export const useInitWasm = () => {
 
   return wasmModule;
 };
+/* eslint-enable @typescript-eslint/ban-ts-comment */
