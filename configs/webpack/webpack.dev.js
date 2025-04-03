@@ -38,7 +38,6 @@ module.exports = {
     static: {
       directory: path.join(__dirname, "dist"),
       watch: {
-        interval: 500,
         ignored: ["**/node_modules"],
         usePolling: true,
       },
