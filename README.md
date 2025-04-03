@@ -1,10 +1,18 @@
 <div align="center">
-  <h1><code>wasm-image-crop</code></h1>
-
-<sub>Built with 🦀🕸 by <a href="https://rustwasm.github.io/">The Rust and WebAssembly Working Group</a></sub>
+  <h1><code>wasm-image-crop</code></h1><sub>Built with 🦀🕸</sub>
 </div>
 
 ## About
+
+Project utilise webassembly module written in Rust for image data processing.
+
+## Stack
+
+- [rustwasm](https://rustwasm.github.io/) by The Rust and WebAssembly Working Group
+- [React](https://react.dev/)
+- [Webpack](https://webpack.js.org/)
+- [Typescript](https://www.typescriptlang.org/)
+- [MUI](https://mui.com/)
 
 ## License
 
