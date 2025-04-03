@@ -9,7 +9,7 @@
     "build:rs": "configs/scripts/build-wasm.sh",
     "build:fe": "__PROD__=true webpack --config configs/webpack/webpack.prod.js",
     "dev": "webpack serve --config configs/webpack/webpack.dev.js",
-    "watch:rs": "nodemon --polling-interval 500 -e rs --exec \"wasm-pack build --out-dir wasm-pkg\"",
+    "watch:rs": "nodemon --polling-interval 1000 -e rs --exec \"yarn build:rs\"",
     "serve": "nodemon -r dotenv/config --config configs/nodemon-prod.json server.js",
     "prepare": "corepack install && husky",
     "lint": "yarn eslint '**/*.{js,ts,tsx}' --cache --quiet",

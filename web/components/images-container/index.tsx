@@ -1,13 +1,14 @@
 import { FC, useRef, useState } from "react";
 
-import { Box, Button, Input } from "@mui/material";
+import { Box, Input } from "@mui/material";
 
 import { convertFileToDataURL } from "utility/helpers/image";
 import { useInitWasm } from "utility/hooks/useInitWasm";
 
+import { NoDataPlaceholder } from "./components/no-data-placeholder";
 import { errorsDict, IMAGE_META_DATA_REGEX } from "./constants";
 import { imageFileValidation } from "./helpers";
-import { inputStyles } from "./styles";
+import { containerStyles, inputStyles } from "./styles";
 
 export const ImagesContainer: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,10 +49,10 @@ export const ImagesContainer: FC = () => {
   };
 
   return (
-    <Box>
-      <Button onClick={openFileModal}>
-        Upload
-      </Button>
+    <Box
+      sx={containerStyles}
+      onClick={openFileModal}
+    >
       <Input
         inputRef={inputRef}
         type="file"
@@ -62,22 +63,18 @@ export const ImagesContainer: FC = () => {
         }}
         sx={inputStyles}
       />
-      {imageData && (
-        <img
-          src={imageData}
-          alt="Processed image"
-          width={500}
-          height={500}
-        />
-      )}
-      {processedImageData && (
-        <img
-          src={processedImageData}
-          alt="Processed image"
-          width={500}
-          height={500}
-        />
-      )}
+      {
+        (imageData ?? processedImageData)
+          ? (
+              <img
+                src={processedImageData ?? imageData}
+                alt="Processed image"
+                width={500}
+                height={500}
+              />
+            )
+          : <NoDataPlaceholder />
+      }
     </Box>
   );
 };
