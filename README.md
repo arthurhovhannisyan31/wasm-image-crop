@@ -8,9 +8,9 @@ Project utilise webassembly module written in Rust for image data processing.
 
 ## Stack
 
-- [rustwasm](https://rustwasm.github.io/) by The Rust and WebAssembly Working Group
-- [React](https://react.dev/)
+- [wasm-pack](https://rustwasm.github.io/) by The Rust and WebAssembly Working Group
 - [Webpack](https://webpack.js.org/)
+- [React](https://react.dev/)
 - [Typescript](https://www.typescriptlang.org/)
 - [MUI](https://mui.com/)
 
