@@ -4,7 +4,17 @@ export const inputStyles: SxProps = {
   display: "none",
 };
 
-export const getContainerStyles = (
+export const containerStyles: SxProps = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "space-between",
+  justifyContent: "center",
+  gap: "24px",
+  height: "800px",
+  width: "500px"
+};
+
+export const getContentStyles = (
   isDragOver: boolean
 ): SxProps => ({
   display: "flex",
