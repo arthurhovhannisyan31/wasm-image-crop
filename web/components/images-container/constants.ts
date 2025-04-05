@@ -19,3 +19,9 @@ export const FILE_SIZE_LIMIT_MB: number = 3 * 1024 * 1024;
 // 100kb
 
 export const IMAGE_META_DATA_REGEX = /^data:image\/(png|jpeg|jpg|webp);base64,/;
+
+export enum ImageEffects {
+  Grayscale = "grayscale",
+  FlipVertically = "flip-vertically",
+  FlipHorizontally = "flip-horizontally",
+}

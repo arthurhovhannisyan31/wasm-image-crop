@@ -1,4 +1,5 @@
 import type { SxProps } from "@mui/material";
+import { blue } from "@mui/material/colors";
 
 export const containerStyles: SxProps = {
   display: "flex",
@@ -12,5 +13,5 @@ export const containerStyles: SxProps = {
 export const iconStyles: SxProps = {
   width: "48px",
   height: "48px",
-  color: "skyblue"
+  color: blue[500]
 };

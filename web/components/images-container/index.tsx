@@ -1,15 +1,16 @@
 import { type DragEvent, type FC, useRef, useState } from "react";
 
-import { Box, Input } from "@mui/material";
+import { Box, Button, Input } from "@mui/material";
 
 import { convertFileToDataURL } from "utility/helpers/image";
 import { useDnDEvent } from "utility/hooks/useDnDEvent";
 import { useInitWasm } from "utility/hooks/useInitWasm";
 
+import { ImageEffects } from "./components/image-effects";
 import { NoDataPlaceholder } from "./components/no-data-placeholder";
 import { errorsDict, IMAGE_META_DATA_REGEX } from "./constants";
 import { imageFileValidation } from "./helpers";
-import { getContainerStyles, inputStyles } from "./styles";
+import { containerStyles, getContentStyles, inputStyles } from "./styles";
 
 export const ImagesContainer: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -63,17 +64,17 @@ export const ImagesContainer: FC = () => {
     e: DragEvent<HTMLInputElement>
   ): void => {
     e.preventDefault();
-    // e.stopPropagation();
   };
 
-  console.log({
-    isDragOver
-  });
-
   return (
-    <Box ref={ref}>
+
+    <Box
+      ref={ref}
+      sx={containerStyles}
+    >
+      <ImageEffects />
       <Box
-        sx={getContainerStyles(isDragOver)}
+        sx={getContentStyles(isDragOver)}
         onClick={openFileModal}
         onDrop={handleFileDrop}
         onDragEnter={preventDragEvent}
@@ -101,6 +102,14 @@ export const ImagesContainer: FC = () => {
               )
             : <NoDataPlaceholder />
         }
+      </Box>
+      <Box display="flex" justifyContent="space-around">
+        <Button variant="contained" color="info">
+          Reset
+        </Button>
+        <Button variant="contained" color="warning">
+          Clear
+        </Button>
       </Box>
     </Box>
   );
