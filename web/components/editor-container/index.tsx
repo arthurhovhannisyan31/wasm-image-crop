@@ -1,4 +1,4 @@
-import { type FC, useState } from "react";
+import { type FC, useCallback, useEffect, useState } from "react";
 
 import { Box, Button } from "@mui/material";
 
@@ -33,18 +33,37 @@ export const EditorContainer: FC = () => {
     try {
       const imageData = await convertFileToDataURL(files[0]);
       setImageData(imageData);
+    } catch (e) {
+      console.log(e);
+      console.log(errorsDict.fileParsing);
+    }
+  };
 
+  const processImageData = useCallback((
+    imageData: string,
+  ) => {
+    try {
       const headlessImageData = imageData.replace(IMAGE_META_DATA_REGEX, "");
-      const image_base64_data = wasm?.grayscale(headlessImageData);
+      const image_base64_data = wasm?.process_image(
+        headlessImageData,
+        filtersState.grayScale,
+        filtersState.flipVertically,
+        filtersState.flipHorizontally,
+        filtersState.rotate,
+        filtersState.blur,
+        filtersState.brighten,
+        filtersState.huerotate,
+        filtersState.contrast,
+        filtersState.unsharpen
+      );
 
       if (image_base64_data) {
         setProcessedImageData(image_base64_data);
       }
     } catch (e) {
       console.log(e);
-      console.log(errorsDict.fileParsing);
     }
-  };
+  }, [filtersState, wasm]);
 
   const handleResetState = () => {
     setFiltersState(imageFiltersInitState);
@@ -55,6 +74,12 @@ export const EditorContainer: FC = () => {
     handleResetState();
     setImageData(undefined);
   };
+
+  useEffect(() => {
+    if (imageData) {
+      processImageData(imageData);
+    }
+  }, [filtersState, imageData, processImageData]);
 
   return (
     <Box

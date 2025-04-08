@@ -34,9 +34,7 @@ export const ImageContainer: FC<ImageContainerProps> = ({
   const handleFileDrop = async (
     e: DragEvent<HTMLInputElement>
   ) => {
-    if (!imageData) {
-      processFiles(e.dataTransfer.files);
-    }
+    processFiles(e.dataTransfer.files);
   };
 
   return (
