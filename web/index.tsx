@@ -2,7 +2,7 @@ import { StrictMode, Suspense } from "react";
 
 import ReactDOM from "react-dom/client";
 
-import { ImagesContainer } from "components/images-container";
+import { EditorContainer } from "components/editor-container";
 import { Layout } from "components/layout";
 
 import "./main.css";
@@ -13,7 +13,7 @@ root.render(
   <StrictMode>
     <Suspense fallback="Loading">
       <Layout>
-        <ImagesContainer />
+        <EditorContainer />
       </Layout>
     </Suspense>
   </StrictMode>,
