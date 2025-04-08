@@ -1,3 +1,5 @@
+import type { FiltersState } from "./components/image-filters/types";
+
 export const supportedMimeTypes: string[] = [
   "image/jpeg",
   "image/jpg",
@@ -20,8 +22,34 @@ export const FILE_SIZE_LIMIT_MB: number = 3 * 1024 * 1024;
 
 export const IMAGE_META_DATA_REGEX = /^data:image\/(png|jpeg|jpg|webp);base64,/;
 
-export enum ImageEffects {
+export enum RotateAngle {
+  Left = 270,
+  Right = 90
+}
+
+export enum ImageFilter {
   Grayscale = "grayscale",
   FlipVertically = "flip-vertically",
   FlipHorizontally = "flip-horizontally",
+  RotateLeft = "rotate-left",
+  RotateRight = "rotate-right",
+  Crop = "crop",
+  Blur = "blur",
+  Brighten = "brighten",
+  Huerotate = "huerotate",
+  Contrast = "contrast",
+  Unsharpen = "unsharpen"
 }
+
+export const imageFiltersInitState: FiltersState = {
+  grayScale: false,
+  flipVertically: false,
+  flipHorizontally: false,
+  showCrop: false,
+  rotate: 0,
+  blur: 0,
+  brighten: 0,
+  huerotate: 0,
+  contrast: 0,
+  unsharpen: 0,
+};

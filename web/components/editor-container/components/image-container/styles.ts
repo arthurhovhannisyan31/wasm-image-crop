@@ -1,17 +1,9 @@
+import type { CSSProperties } from "react";
+
 import type { SxProps } from "@mui/material";
 
 export const inputStyles: SxProps = {
   display: "none",
-};
-
-export const containerStyles: SxProps = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "space-between",
-  justifyContent: "center",
-  gap: "24px",
-  height: "800px",
-  width: "500px"
 };
 
 export const getContentStyles = (
@@ -29,3 +21,7 @@ export const getContentStyles = (
   borderRadius: "8px",
   cursor: "pointer",
 });
+
+export const imageStyles: CSSProperties = {
+  objectFit: "contain"
+};
