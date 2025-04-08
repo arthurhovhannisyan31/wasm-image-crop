@@ -6,7 +6,7 @@ export const controlsContainer: SxProps = {
   flex: 1,
   flexDirection: "column",
   gap: "16px",
-  height: "inherit"
+  marginTop: "40px"
 };
 
 export const smallControlsContainerStyles: SxProps = {

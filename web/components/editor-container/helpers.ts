@@ -33,14 +33,5 @@ export const imageFileValidation = (
     return false;
   }
 
-  if (file.size > FILE_SIZE_LIMIT_MB) {
-    // setSnackbarProps(
-    //   errorsDict.fileSize,
-    //   "error",
-    // );
-
-    return false;
-  }
-
-  return true;
+  return file.size <= FILE_SIZE_LIMIT_MB;
 };
