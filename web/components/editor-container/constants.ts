@@ -21,10 +21,11 @@ export const FILE_SIZE_LIMIT_MB: number = 3 * 1024 * 1024;
 // 100kb
 
 export const IMAGE_META_DATA_REGEX = /^data:image\/(png|jpeg|jpg|webp);base64,/;
+export const ANGLE_STEP = 90;
 
 export enum RotateAngle {
-  Left = 270,
-  Right = 90
+  Left = "left",
+  Right = "right"
 }
 
 export enum ImageFilter {

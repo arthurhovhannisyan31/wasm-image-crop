@@ -1,6 +1,22 @@
-import { ImageFilter, imageFiltersInitState, RotateAngle } from "../../constants";
+import { ANGLE_STEP, ImageFilter, imageFiltersInitState, RotateAngle } from "../../constants";
 
 import type { FiltersState } from "./types";
+
+const rotateAngleCalculator = (
+  direction: RotateAngle,
+  angle: number
+): number => {
+  const angleSign = direction === RotateAngle.Right ? 1 : -1;
+  const newAngle = angle + ANGLE_STEP * angleSign;
+
+  if (newAngle < 0) {
+    return ANGLE_STEP * 3;
+  } else if (newAngle === 360) {
+    return 0;
+  }
+
+  return newAngle;
+};
 
 export const imageFiltersReducer = (
   state: FiltersState,
@@ -29,13 +45,13 @@ export const imageFiltersReducer = (
     case ImageFilter.RotateLeft: {
       return {
         ...state,
-        rotate: RotateAngle.Left
+        rotate: rotateAngleCalculator(RotateAngle.Left, state.rotate),
       };
     }
     case ImageFilter.RotateRight: {
       return {
         ...state,
-        rotate: RotateAngle.Right
+        rotate: rotateAngleCalculator(RotateAngle.Right, state.rotate),
       };
     }
     case ImageFilter.Crop: {
