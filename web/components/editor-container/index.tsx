@@ -1,4 +1,4 @@
-import { type FC, useCallback, useEffect, useState } from "react";
+import { type FC, useCallback, useState } from "react";
 
 import { Box, Button } from "@mui/material";
 
@@ -32,6 +32,7 @@ export const EditorContainer: FC = () => {
 
     try {
       const imageData = await convertFileToDataURL(files[0]);
+
       setImageData(imageData);
     } catch (e) {
       console.log(e);
@@ -41,6 +42,7 @@ export const EditorContainer: FC = () => {
 
   const processImageData = useCallback((
     imageData: string,
+    filtersState: FiltersState
   ) => {
     try {
       const headlessImageData = imageData.replace(IMAGE_META_DATA_REGEX, "");
@@ -63,7 +65,7 @@ export const EditorContainer: FC = () => {
     } catch (e) {
       console.log(e);
     }
-  }, [filtersState, wasm]);
+  }, [wasm]);
 
   const handleResetState = () => {
     setFiltersState(imageFiltersInitState);
@@ -75,11 +77,19 @@ export const EditorContainer: FC = () => {
     setImageData(undefined);
   };
 
-  useEffect(() => {
-    if (imageData) {
-      processImageData(imageData);
-    }
-  }, [filtersState, imageData, processImageData]);
+  const handleFiltersChange = (
+    handleFiltersState: (val: FiltersState) => FiltersState
+  ) => {
+    const newFiltersState = handleFiltersState(filtersState);
+
+    setFiltersState(newFiltersState);
+    processImageData(
+      imageData as string,
+      newFiltersState
+    );
+  };
+
+  const disableControls = !imageData;
 
   return (
     <Box
@@ -87,7 +97,7 @@ export const EditorContainer: FC = () => {
       sx={containerStyles}
     >
       <ImageFilters
-        setFiltersState={setFiltersState}
+        setFiltersState={handleFiltersChange}
         grayScale={filtersState.grayScale}
         flipHorizontally={filtersState.flipHorizontally}
         flipVertically={filtersState.flipVertically}
@@ -98,10 +108,11 @@ export const EditorContainer: FC = () => {
         huerotate={filtersState.huerotate}
         contrast={filtersState.contrast}
         unsharpen={filtersState.unsharpen}
+        disabled={disableControls}
       />
       <ImageContainer
         isDragOver={isDragOver}
-        imageData={processedImageData ?? imageData}
+        imageData={processedImageData ?? imageData ?? ""}
         processFiles={processFiles}
       />
       <Box display="flex" justifyContent="space-around">
@@ -109,6 +120,7 @@ export const EditorContainer: FC = () => {
           onClick={handleResetState}
           variant="contained"
           color="info"
+          disabled={disableControls}
         >
           Reset
         </Button>
@@ -116,6 +128,7 @@ export const EditorContainer: FC = () => {
           onClick={handleClearState}
           variant="contained"
           color="warning"
+          disabled={disableControls}
         >
           Clear
         </Button>

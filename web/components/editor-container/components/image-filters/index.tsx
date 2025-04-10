@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC } from "react";
 
 import ContrastIcon from "@mui/icons-material/Contrast";
 import CropIcon from "@mui/icons-material/Crop";
@@ -21,7 +21,8 @@ import { FiltersState } from "./types";
 
 export interface ImageFiltersProps
   extends FiltersState {
-  setFiltersState: Dispatch<SetStateAction<FiltersState>>;
+  setFiltersState: (val: (val: FiltersState) => FiltersState) => void;
+  disabled: boolean;
 }
 
 export const ImageFilters: FC<ImageFiltersProps> = ({
@@ -35,12 +36,13 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
   huerotate,
   contrast,
   unsharpen,
+  disabled
 }) => {
   const handleChange = (
     imageEffect: string,
     val?: unknown
   ) => {
-    setFiltersState(state => imageFiltersReducer(
+    setFiltersState((state: FiltersState) => imageFiltersReducer(
       state,
       imageEffect as ImageFilter,
       val
@@ -55,6 +57,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             value={ImageFilter.Grayscale}
             selected={grayScale}
             onChange={() => handleChange(ImageFilter.Grayscale)}
+            disabled={disabled}
           >
             <ContrastIcon sx={iconButtonStyles} />
           </ToggleButton>
@@ -64,6 +67,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             value={ImageFilter.FlipVertically}
             selected={flipVertically}
             onChange={() => handleChange(ImageFilter.FlipVertically)}
+            disabled={disabled}
           >
             <FlipIcon sx={iconButtonStyles} />
           </ToggleButton>
@@ -73,6 +77,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             value={ImageFilter.FlipHorizontally}
             selected={flipHorizontally}
             onChange={() => handleChange(ImageFilter.FlipHorizontally)}
+            disabled={disabled}
           >
             <FlipIcon sx={flipHorizontallyIconStyles} />
           </ToggleButton>
@@ -80,6 +85,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
         <Tooltip title="Rotate left">
           <IconButton
             onClick={_ => handleChange(ImageFilter.RotateLeft)}
+            disabled={disabled}
           >
             <RotateLeftIcon sx={iconButtonStyles} />
           </IconButton>
@@ -87,6 +93,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
         <Tooltip title="Rotate right">
           <IconButton
             onClick={_ => handleChange(ImageFilter.RotateRight)}
+            disabled={disabled}
           >
             <RotateRightIcon sx={iconButtonStyles} />
           </IconButton>
@@ -96,6 +103,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             value={ImageFilter.Crop}
             selected={showCrop}
             onClick={_ => handleChange(ImageFilter.Crop)}
+            disabled={disabled}
           >
             <CropIcon sx={flipHorizontallyIconStyles} />
           </ToggleButton>
@@ -110,6 +118,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             value={blur}
             valueLabelDisplay="auto"
             onChange={(_, val: number | number[]) => handleChange(ImageFilter.Blur, val)}
+            disabled={disabled}
           />
         </Box>
         <Box>
@@ -120,6 +129,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             value={brighten}
             valueLabelDisplay="auto"
             onChange={(_, val: number | number[]) => handleChange(ImageFilter.Brighten, val)}
+            disabled={disabled}
           />
         </Box>
         <Box>
@@ -130,6 +140,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             value={huerotate}
             valueLabelDisplay="auto"
             onChange={(_, val: number | number[]) => handleChange(ImageFilter.Huerotate, val)}
+            disabled={disabled}
           />
         </Box>
         <Box>
@@ -140,6 +151,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             value={contrast}
             valueLabelDisplay="auto"
             onChange={(_, val: number | number[]) => handleChange(ImageFilter.Contrast, val)}
+            disabled={disabled}
           />
         </Box>
         <Box>
@@ -150,6 +162,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             value={unsharpen}
             valueLabelDisplay="auto"
             onChange={(_, val: number | number[]) => handleChange(ImageFilter.Unsharpen, val)}
+            disabled={disabled}
           />
         </Box>
         Crop
