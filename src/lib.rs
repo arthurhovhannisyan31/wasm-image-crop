@@ -14,18 +14,15 @@ fn apply_image_filters(
   grayscale_flag: bool,
   flip_vertically_flag: bool,
   flip_horizontally_flag: bool,
+  invert_colors_flag: bool,
   rotate: i32,
   blur: f32,
-  brighten: f32,
-  huerotate: f32,
+  brighten: i32,
+  huerotate: i32,
   contrast: f32,
   unsharpen: f32,
 ) {
-  log(&&format!("blur {:?}", blur).into());
-  log(&&format!("brighten {:?}", brighten).into());
-  log(&&format!("huerotate {:?}", huerotate).into());
-  log(&&format!("contrast {:?}", contrast).into());
-  log(&&format!("unsharpen {:?}", unsharpen).into());
+  // crop first
 
   if grayscale_flag {
     *img = img.grayscale();
@@ -40,11 +37,35 @@ fn apply_image_filters(
     *img = img.fliph();
   }
 
+  if invert_colors_flag {
+    img.invert();
+  }
+
   match rotate {
     90 => *img = img.rotate90(),
     180 => *img = img.rotate180(),
     270 => *img = img.rotate270(),
     _ => (),
+  }
+
+  if blur > 0.0 {
+    *img = img.blur(blur);
+  }
+
+  if brighten != 0 {
+    *img = img.brighten(brighten);
+  }
+
+  if huerotate != 0 {
+    *img = img.huerotate(huerotate);
+  }
+
+  if contrast != 0.0 {
+    *img = img.adjust_contrast(contrast);
+  }
+
+  if unsharpen != 0.0 {
+    *img = img.unsharpen(unsharpen, 20);
   }
 }
 
@@ -54,15 +75,14 @@ pub fn process_image(
   grayscale_flag: bool,
   flip_vertically_flag: bool,
   flip_horizontally_flag: bool,
+  invert_colors: bool,
   rotate: i32,
   blur: f32,
-  brighten: f32,
-  huerotate: f32,
+  brighten: i32,
+  huerotate: i32,
   contrast: f32,
   unsharpen: f32,
 ) -> String {
-  // 1 crop|resize
-  // 2 apply filters
   let base64_to_vector = BASE64_STANDARD.decode(encoded_file).unwrap();
   log(&"Image decoded".into());
 
@@ -77,6 +97,7 @@ pub fn process_image(
     grayscale_flag,
     flip_vertically_flag,
     flip_horizontally_flag,
+    invert_colors,
     rotate,
     blur,
     brighten,
