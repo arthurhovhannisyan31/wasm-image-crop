@@ -1,9 +1,11 @@
-import { DragEvent, FC, useRef } from "react";
+import { FC } from "react";
 
-import { Box, Input } from "@mui/material";
+import { Box } from "@mui/material";
 
-import { getContentStyles, imageStyles, inputStyles } from "./styles";
-import { NoDataPlaceholder } from "../no-data-placeholder";
+import { preventDragEvent } from "utility/helpers/utils";
+
+import { getContentStyles, imageStyles } from "./styles";
+import { DnDPlaceholder } from "../dnd-placeholder";
 
 export interface ImageContainerProps {
   isDragOver: boolean;
@@ -16,45 +18,13 @@ export const ImageContainer: FC<ImageContainerProps> = ({
   imageData = "",
   processFiles
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const preventDragEvent = (
-    e: DragEvent<HTMLInputElement>
-  ): void => {
-    e.preventDefault();
-  };
-
-  const handleFileChange = () => {
-    processFiles(inputRef.current?.files);
-  };
-
-  const openFileModal = () => {
-    inputRef.current?.click();
-  };
-
-  const handleFileDrop = async (
-    e: DragEvent<HTMLInputElement>
-  ) => {
-    processFiles(e.dataTransfer.files);
-  };
-
   return (
     <Box
       sx={getContentStyles(isDragOver)}
-      onClick={openFileModal}
-      onDrop={handleFileDrop}
       onDragEnter={preventDragEvent}
       onDragOver={preventDragEvent}
+      onDragStart={preventDragEvent}
     >
-      <Input
-        inputRef={inputRef}
-        type="file"
-        inputProps={{
-          accept: "image/*",
-          multiple: false,
-          onChange: handleFileChange
-        }}
-        sx={inputStyles}
-      />
       {
         imageData
           ? (
@@ -66,7 +36,11 @@ export const ImageContainer: FC<ImageContainerProps> = ({
                 height={500}
               />
             )
-          : <NoDataPlaceholder />
+          : (
+              <DnDPlaceholder
+                processFiles={processFiles}
+              />
+            )
       }
     </Box>
   );

@@ -19,7 +19,6 @@ export const getContentStyles = (
   borderWidth: isDragOver ? "5px" : "1px",
   strokeDasharray: [10, 20],
   borderRadius: "8px",
-  cursor: "pointer",
 });
 
 export const imageStyles: CSSProperties = {
