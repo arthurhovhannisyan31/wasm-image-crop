@@ -4,7 +4,8 @@ import { Box } from "@mui/material";
 
 import { preventDragEvent } from "utility/helpers/utils";
 
-import { getContentStyles, imageStyles } from "./styles";
+import { contentStyles, getContainerStyles, imageStyles } from "./styles";
+import { CropMask } from "../crop-mask";
 import { DnDPlaceholder } from "../dnd-placeholder";
 
 export interface ImageContainerProps {
@@ -20,7 +21,7 @@ export const ImageContainer: FC<ImageContainerProps> = ({
 }) => {
   return (
     <Box
-      sx={getContentStyles(isDragOver)}
+      sx={getContainerStyles(isDragOver)}
       onDragEnter={preventDragEvent}
       onDragOver={preventDragEvent}
       onDragStart={preventDragEvent}
@@ -28,13 +29,16 @@ export const ImageContainer: FC<ImageContainerProps> = ({
       {
         imageData
           ? (
-              <img
-                src={imageData}
-                alt="Processed image"
-                style={imageStyles}
-                width={500}
-                height={500}
-              />
+              <Box sx={contentStyles}>
+                <CropMask />
+                <img
+                  src={imageData}
+                  alt="Processed image"
+                  style={imageStyles}
+                  width={500}
+                  height={500}
+                />
+              </Box>
             )
           : (
               <DnDPlaceholder
