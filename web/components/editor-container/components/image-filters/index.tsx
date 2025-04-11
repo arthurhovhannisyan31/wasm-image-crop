@@ -3,6 +3,7 @@ import { FC } from "react";
 import ContrastIcon from "@mui/icons-material/Contrast";
 import CropIcon from "@mui/icons-material/Crop";
 import FlipIcon from "@mui/icons-material/Flip";
+import InvertColorsIcon from "@mui/icons-material/InvertColors";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 import RotateRightIcon from "@mui/icons-material/RotateRight";
 import { Box, IconButton, Slider, ToggleButton, Tooltip, Typography } from "@mui/material";
@@ -36,7 +37,8 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
   huerotate,
   contrast,
   unsharpen,
-  disabled
+  disabled,
+  invertColors
 }) => {
   const handleChange = (
     imageEffect: string,
@@ -82,6 +84,26 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             <FlipIcon sx={flipHorizontallyIconStyles} />
           </ToggleButton>
         </Tooltip>
+        <Tooltip title="Crop">
+          <ToggleButton
+            value={ImageFilter.Crop}
+            selected={showCrop}
+            onClick={_ => handleChange(ImageFilter.Crop)}
+            disabled={disabled}
+          >
+            <CropIcon sx={flipHorizontallyIconStyles} />
+          </ToggleButton>
+        </Tooltip>
+        <Tooltip title="Invert Colors">
+          <ToggleButton
+            value={ImageFilter.Invert}
+            selected={invertColors}
+            onClick={_ => handleChange(ImageFilter.Invert)}
+            disabled={disabled}
+          >
+            <InvertColorsIcon sx={iconButtonStyles} />
+          </ToggleButton>
+        </Tooltip>
         <Tooltip title="Rotate left">
           <IconButton
             onClick={_ => handleChange(ImageFilter.RotateLeft)}
@@ -98,16 +120,6 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             <RotateRightIcon sx={iconButtonStyles} />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Crop">
-          <ToggleButton
-            value={ImageFilter.Crop}
-            selected={showCrop}
-            onClick={_ => handleChange(ImageFilter.Crop)}
-            disabled={disabled}
-          >
-            <CropIcon sx={flipHorizontallyIconStyles} />
-          </ToggleButton>
-        </Tooltip>
       </Box>
       <Box sx={sliderControlsContainerStyles}>
         <Box>
@@ -119,6 +131,8 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             valueLabelDisplay="auto"
             onChange={(_, val: number | number[]) => handleChange(ImageFilter.Blur, val)}
             disabled={disabled}
+            min={0}
+            max={50}
           />
         </Box>
         <Box>
@@ -130,6 +144,8 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             valueLabelDisplay="auto"
             onChange={(_, val: number | number[]) => handleChange(ImageFilter.Brighten, val)}
             disabled={disabled}
+            min={-200}
+            max={200}
           />
         </Box>
         <Box>
@@ -141,6 +157,8 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             valueLabelDisplay="auto"
             onChange={(_, val: number | number[]) => handleChange(ImageFilter.Huerotate, val)}
             disabled={disabled}
+            min={0}
+            max={360}
           />
         </Box>
         <Box>
@@ -152,6 +170,8 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             valueLabelDisplay="auto"
             onChange={(_, val: number | number[]) => handleChange(ImageFilter.Contrast, val)}
             disabled={disabled}
+            min={-100}
+            max={100}
           />
         </Box>
         <Box>
@@ -163,6 +183,8 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             valueLabelDisplay="auto"
             onChange={(_, val: number | number[]) => handleChange(ImageFilter.Unsharpen, val)}
             disabled={disabled}
+            min={0}
+            max={100}
           />
         </Box>
         Crop

@@ -9,4 +9,5 @@ export interface FiltersState {
   huerotate: number;
   contrast: number;
   unsharpen: number;
+  invertColors: boolean;
 }

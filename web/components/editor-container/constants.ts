@@ -39,7 +39,8 @@ export enum ImageFilter {
   Brighten = "brighten",
   Huerotate = "huerotate",
   Contrast = "contrast",
-  Unsharpen = "unsharpen"
+  Unsharpen = "unsharpen",
+  Invert = "invert"
 }
 
 export const imageFiltersInitState: FiltersState = {
@@ -53,4 +54,5 @@ export const imageFiltersInitState: FiltersState = {
   huerotate: 0,
   contrast: 0,
   unsharpen: 0,
+  invertColors: false
 };

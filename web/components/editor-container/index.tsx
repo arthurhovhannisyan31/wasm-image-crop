@@ -34,6 +34,7 @@ export const EditorContainer: FC = () => {
       const imageData = await convertFileToDataURL(files[0]);
 
       setImageData(imageData);
+      setProcessedImageData(undefined);
     } catch (e) {
       console.log(e);
       console.log(errorsDict.fileParsing);
@@ -51,6 +52,7 @@ export const EditorContainer: FC = () => {
         filtersState.grayScale,
         filtersState.flipVertically,
         filtersState.flipHorizontally,
+        filtersState.invertColors,
         filtersState.rotate,
         filtersState.blur,
         filtersState.brighten,
@@ -108,6 +110,7 @@ export const EditorContainer: FC = () => {
         huerotate={filtersState.huerotate}
         contrast={filtersState.contrast}
         unsharpen={filtersState.unsharpen}
+        invertColors={filtersState.invertColors}
         disabled={disableControls}
       />
       <ImageContainer
