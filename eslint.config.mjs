@@ -254,9 +254,7 @@ export const importsConfigs = [
 export default tseslint.config(
   {
     ignores: [
-      "dist",
-      "target",
-      "wasm-pkg"
+      "dist", "target", "wasm-pkg", "public"
     ]
   },
   languageOptionsConfig,

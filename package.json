@@ -7,7 +7,7 @@
   "scripts": {
     "build": "yarn build:rs && yarn build:fe",
     "build:rs": "configs/scripts/build-wasm.sh",
-    "build:fe": "__PROD__=true webpack --config configs/webpack/webpack.prod.js",
+    "build:fe": "configs/scripts/build-web.sh",
     "dev": "webpack serve --config configs/webpack/webpack.dev.js",
     "watch:rs": "nodemon --polling-interval 1000 -e rs --exec \"yarn build:rs\"",
     "serve": "nodemon -r dotenv/config --config configs/nodemon-prod.json server.js",
@@ -18,6 +18,7 @@
     "types": "NODE_OPTIONS=--max-old-space-size=8196 tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@arthurhovhannisyan31/simple-service-worker": "github:arthurhovhannisyan31/simple-service-worker",
     "@emotion/react": "^11.14.0",
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.14.0",
@@ -31,12 +32,6 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.26.4",
-    "@babel/core": "^7.26.10",
-    "@babel/plugin-transform-runtime": "^7.26.10",
-    "@babel/preset-env": "^7.26.9",
-    "@babel/preset-react": "^7.26.3",
-    "@babel/preset-typescript": "^7.26.0",
     "@eslint/compat": "^1.2.7",
     "@eslint/eslintrc": "^3.3.0",
     "@eslint/js": "^9.18.0",
@@ -47,7 +42,6 @@
     "@types/webpack-env": "^1.16.2",
     "@typescript-eslint/eslint-plugin": "^8.25.0",
     "@typescript-eslint/parser": "^8.27.0",
-    "babel-loader": "^10.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^7.1.2",
     "dotenv": "^16.4.7",
@@ -70,9 +64,10 @@
     "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.25.0",
-    "webpack": "^5.52.0",
-    "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.1.0",
-    "webpack-merge": "^5.8.0"
+    "webpack": "^5.99.6",
+    "webpack-assets-manifest": "^6.0.2",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1",
+    "webpack-merge": "^6.0.1"
   }
 }

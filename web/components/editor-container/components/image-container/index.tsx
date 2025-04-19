@@ -1,9 +1,12 @@
-import { DragEvent, FC, useRef } from "react";
+import { FC } from "react";
 
-import { Box, Input } from "@mui/material";
+import { Box } from "@mui/material";
 
-import { getContentStyles, imageStyles, inputStyles } from "./styles";
-import { NoDataPlaceholder } from "../no-data-placeholder";
+import { preventDragEvent } from "utility/helpers/utils";
+
+import { contentStyles, getContainerStyles, imageStyles } from "./styles";
+import { CropMask } from "../crop-mask";
+import { DnDPlaceholder } from "../dnd-placeholder";
 
 export interface ImageContainerProps {
   isDragOver: boolean;
@@ -16,57 +19,32 @@ export const ImageContainer: FC<ImageContainerProps> = ({
   imageData = "",
   processFiles
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const preventDragEvent = (
-    e: DragEvent<HTMLInputElement>
-  ): void => {
-    e.preventDefault();
-  };
-
-  const handleFileChange = () => {
-    processFiles(inputRef.current?.files);
-  };
-
-  const openFileModal = () => {
-    inputRef.current?.click();
-  };
-
-  const handleFileDrop = async (
-    e: DragEvent<HTMLInputElement>
-  ) => {
-    processFiles(e.dataTransfer.files);
-  };
-
   return (
     <Box
-      sx={getContentStyles(isDragOver)}
-      onClick={openFileModal}
-      onDrop={handleFileDrop}
+      sx={getContainerStyles(isDragOver)}
       onDragEnter={preventDragEvent}
       onDragOver={preventDragEvent}
+      onDragStart={preventDragEvent}
     >
-      <Input
-        inputRef={inputRef}
-        type="file"
-        inputProps={{
-          accept: "image/*",
-          multiple: false,
-          onChange: handleFileChange
-        }}
-        sx={inputStyles}
-      />
       {
         imageData
           ? (
-              <img
-                src={imageData}
-                alt="Processed image"
-                style={imageStyles}
-                width={500}
-                height={500}
+              <Box sx={contentStyles}>
+                <CropMask />
+                <img
+                  src={imageData}
+                  alt="Processed image"
+                  style={imageStyles}
+                  width={500}
+                  height={500}
+                />
+              </Box>
+            )
+          : (
+              <DnDPlaceholder
+                processFiles={processFiles}
               />
             )
-          : <NoDataPlaceholder />
       }
     </Box>
   );

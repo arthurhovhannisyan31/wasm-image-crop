@@ -7,7 +7,8 @@ export const containerStyles: SxProps = {
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  gap: "8px"
+  gap: "8px",
+  cursor: "pointer"
 };
 
 export const iconStyles: SxProps = {
