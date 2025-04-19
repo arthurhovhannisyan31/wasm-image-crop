@@ -9,26 +9,19 @@
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+yarn-debug.log*
+yarn-error.log*
+
+/node_modules
+/dist
+.eslintcache
+*.tsbuildinfo
+.husky/_
+/public/service-worker.js
+*assets-manifest.json
 
 # editor
 /.idea
 
-# packages
-/node_modules
-/dist
-
-# eslint
-.eslintcache
-
-# typescript
-*.tsbuildinfo
-
-# husky
-.husky/_
-
-# debug
-yarn-debug.log*
-yarn-error.log*
-
-# notes
+# local
 notes.txt
