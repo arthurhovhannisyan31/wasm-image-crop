@@ -47,7 +47,6 @@ export const imageFiltersInitState: FiltersState = {
   grayScale: false,
   flipVertically: false,
   flipHorizontally: false,
-  showCrop: false,
   rotate: 0,
   blur: 0,
   brighten: 0,

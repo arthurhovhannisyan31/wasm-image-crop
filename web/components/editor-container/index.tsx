@@ -1,12 +1,14 @@
 import { type FC, useCallback, useState } from "react";
 
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
+import { isEqual } from "lodash-es";
 
 import { convertFileToDataURL } from "utility/helpers/image";
 import { useDnDEvent } from "utility/hooks/useDnDEvent";
 import { useInitWasm } from "utility/hooks/useInitWasm";
 
 import { ImageContainer } from "./components/image-container";
+import { ImageControls } from "./components/image-controls";
 import { ImageFilters } from "./components/image-filters";
 import { errorsDict, IMAGE_META_DATA_REGEX, imageFiltersInitState } from "./constants";
 import { imageFileValidation } from "./helpers";
@@ -92,6 +94,7 @@ export const EditorContainer: FC = () => {
   };
 
   const disableControls = !imageData;
+  const isDownloadActive = isEqual(imageFiltersInitState, filtersState);
 
   return (
     <Box
@@ -103,7 +106,6 @@ export const EditorContainer: FC = () => {
         grayScale={filtersState.grayScale}
         flipHorizontally={filtersState.flipHorizontally}
         flipVertically={filtersState.flipVertically}
-        showCrop={filtersState.showCrop}
         rotate={filtersState.rotate}
         blur={filtersState.blur}
         brighten={filtersState.brighten}
@@ -112,30 +114,23 @@ export const EditorContainer: FC = () => {
         unsharpen={filtersState.unsharpen}
         invertColors={filtersState.invertColors}
         disabled={disableControls}
+        crop={() => {
+        }}
       />
       <ImageContainer
         isDragOver={isDragOver}
         imageData={processedImageData ?? imageData ?? ""}
         processFiles={processFiles}
       />
-      <Box display="flex" justifyContent="space-around">
-        <Button
-          onClick={handleResetState}
-          variant="contained"
-          color="info"
-          disabled={disableControls}
-        >
-          Reset
-        </Button>
-        <Button
-          onClick={handleClearState}
-          variant="contained"
-          color="warning"
-          disabled={disableControls}
-        >
-          Clear
-        </Button>
-      </Box>
+      <ImageControls
+        disabled={disableControls}
+        downloadActive={isDownloadActive}
+        clearState={handleClearState}
+        resetState={handleResetState}
+        downloadImage={() => {
+          // TODO Implement
+        }}
+      />
     </Box>
   );
 };
