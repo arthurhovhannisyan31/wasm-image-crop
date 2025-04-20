@@ -12,4 +12,13 @@ export const containerStyles: SxProps = {
   zIndex: 10,
   cursor: "move",
   border: "1px solid red",
+  maxWidth: "100%",
+  maxHeight: "100%"
+};
+
+export const resizeImageStyles: SxProps = {
+  position: "absolute",
+  bottom: -3,
+  right: -2,
+  rotate: "-45deg"
 };

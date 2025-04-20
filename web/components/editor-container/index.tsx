@@ -114,8 +114,7 @@ export const EditorContainer: FC = () => {
         unsharpen={filtersState.unsharpen}
         invertColors={filtersState.invertColors}
         disabled={disableControls}
-        crop={() => {
-        }}
+        crop={() => null}
       />
       <ImageContainer
         isDragOver={isDragOver}
