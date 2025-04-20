@@ -1,4 +1,4 @@
-import { type FC, useCallback, useState } from "react";
+import { type FC, useCallback, useRef, useState } from "react";
 
 import { Box } from "@mui/material";
 import { isEqual } from "lodash-es";
@@ -7,6 +7,7 @@ import { convertFileToDataURL } from "utility/helpers/image";
 import { useDnDEvent } from "utility/hooks/useDnDEvent";
 import { useInitWasm } from "utility/hooks/useInitWasm";
 
+import { CropMaskRefProps } from "./components/crop-mask";
 import { ImageContainer } from "./components/image-container";
 import { ImageControls } from "./components/image-controls";
 import { ImageFilters } from "./components/image-filters";
@@ -21,6 +22,7 @@ export const EditorContainer: FC = () => {
   const [imageData, setImageData] = useState<string>();
   const [processedImageData, setProcessedImageData] = useState<string>();
   const [filtersState, setFiltersState] = useState<FiltersState>(imageFiltersInitState);
+  const imageCropRef = useRef<CropMaskRefProps>(null);
 
   const { isDragOver, ref } = useDnDEvent();
 
@@ -93,6 +95,18 @@ export const EditorContainer: FC = () => {
     );
   };
 
+  const setCropRef = (ref: CropMaskRefProps) => {
+    if (ref) {
+      imageCropRef.current = ref;
+    }
+  };
+
+  const handleImageCrop = () => {
+    console.log(imageCropRef.current?.getCropData());
+    // set to state
+    // call processImageData
+  };
+
   const disableControls = !imageData;
   const isDownloadActive = isEqual(imageFiltersInitState, filtersState);
 
@@ -114,12 +128,13 @@ export const EditorContainer: FC = () => {
         unsharpen={filtersState.unsharpen}
         invertColors={filtersState.invertColors}
         disabled={disableControls}
-        crop={() => null}
+        crop={handleImageCrop}
       />
       <ImageContainer
         isDragOver={isDragOver}
         imageData={processedImageData ?? imageData ?? ""}
         processFiles={processFiles}
+        cropRef={setCropRef}
       />
       <ImageControls
         disabled={disableControls}

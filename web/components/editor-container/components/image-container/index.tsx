@@ -5,19 +5,21 @@ import { Box } from "@mui/material";
 import { preventDragEvent } from "utility/helpers/utils";
 
 import { contentStyles, getContainerStyles, imageStyles } from "./styles";
-import { CropMask } from "../crop-mask";
+import { CropMask, CropMaskRefProps } from "../crop-mask";
 import { DnDPlaceholder } from "../dnd-placeholder";
 
 export interface ImageContainerProps {
   isDragOver: boolean;
   imageData?: string;
   processFiles: (files: FileList | null | undefined) => Promise<void>;
+  cropRef: (val: CropMaskRefProps) => void;
 }
 
 export const ImageContainer: FC<ImageContainerProps> = ({
   isDragOver,
   imageData = "",
-  processFiles
+  processFiles,
+  cropRef
 }) => {
   return (
     <Box
@@ -30,7 +32,9 @@ export const ImageContainer: FC<ImageContainerProps> = ({
         imageData
           ? (
               <Box sx={contentStyles}>
-                <CropMask />
+                <CropMask
+                  ref={cropRef}
+                />
                 <img
                   src={imageData}
                   alt="Processed image"

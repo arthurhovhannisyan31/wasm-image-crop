@@ -1,4 +1,4 @@
-import { type FC, type PointerEvent, useEffect, useRef } from "react";
+import { type FC, type PointerEvent, useEffect, useImperativeHandle, useRef } from "react";
 
 import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 import { Box } from "@mui/material";
@@ -7,7 +7,24 @@ import { CROP_MASK_ID } from "./constants";
 import { isBottomRightCorner } from "./helpers";
 import { containerStyles, resizeImageStyles } from "./styles";
 
-export const CropMask: FC = () => {
+export interface CropMaskDimensions {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface CropMaskRefProps {
+  getCropData: () => CropMaskDimensions;
+}
+
+export interface CropMaskProps {
+  ref: (val: CropMaskRefProps) => void; // TODO Ref with getCropData method
+}
+
+export const CropMask: FC<CropMaskProps> = ({
+  ref
+}) => {
   const cropRef = useRef<HTMLDivElement>(null);
   const containerRect = useRef<DOMRect>(null);
   const position = useRef({
@@ -101,6 +118,22 @@ export const CropMask: FC = () => {
       containerRect.current = cropRef.current?.getBoundingClientRect();
     }
   }, []);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      getCropData: () => {
+        const cropRect = cropRef.current?.getBoundingClientRect();
+
+        return {
+          x: cropRect?.x ?? 0,
+          y: cropRect?.y ?? 0,
+          width: cropRect?.width ?? 0,
+          height: cropRect?.height ?? 0,
+        };
+      }
+    })
+  );
 
   return (
     <Box
