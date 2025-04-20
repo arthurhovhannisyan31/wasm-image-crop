@@ -21,8 +21,13 @@ fn apply_image_filters(
   huerotate: i32,
   contrast: f32,
   unsharpen: f32,
+  crop_x: u32,
+  crop_y: u32,
+  crop_width: u32,
+  crop_height: u32,
 ) {
-  // crop first
+  let dimensions = &img.dimensions();
+  log(&format!("{:?}", dimensions).into());
 
   if grayscale_flag {
     *img = img.grayscale();
@@ -82,15 +87,16 @@ pub fn process_image(
   huerotate: i32,
   contrast: f32,
   unsharpen: f32,
+  crop_x: u32,
+  crop_y: u32,
+  crop_width: u32,
+  crop_height: u32,
 ) -> String {
   let base64_to_vector = BASE64_STANDARD.decode(encoded_file).unwrap();
   log(&"Image decoded".into());
 
   let mut img = load_from_memory(&base64_to_vector).unwrap();
   log(&"Image loaded".into());
-
-  let dimensions = &img.dimensions();
-  log(&format!("{:?}", dimensions).into());
 
   apply_image_filters(
     &mut img,
@@ -104,6 +110,10 @@ pub fn process_image(
     huerotate,
     contrast,
     unsharpen,
+    crop_x,
+    crop_y,
+    crop_width,
+    crop_height,
   );
 
   let mut buffer = vec![];
