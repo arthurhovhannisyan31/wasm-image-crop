@@ -6,7 +6,7 @@ export const inputStyles: SxProps = {
   display: "none",
 };
 
-export const getContentStyles = (
+export const getContainerStyles = (
   isDragOver: boolean
 ): SxProps => ({
   display: "flex",
@@ -19,9 +19,12 @@ export const getContentStyles = (
   borderWidth: isDragOver ? "5px" : "1px",
   strokeDasharray: [10, 20],
   borderRadius: "8px",
-  cursor: "pointer",
 });
 
 export const imageStyles: CSSProperties = {
   objectFit: "contain"
+};
+
+export const contentStyles: SxProps = {
+  position: "relative"
 };

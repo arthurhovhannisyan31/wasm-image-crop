@@ -71,6 +71,12 @@ export const imageFiltersReducer = (
         [imageEffect]: value
       };
     }
+    case ImageFilter.Invert: {
+      return {
+        ...state,
+        invertColors: !state.invertColors
+      };
+    }
   }
 
   return imageFiltersInitState;
