@@ -1,3 +1,5 @@
+import { cropInitProps } from "./components/crop-mask/constants";
+
 import type { FiltersState } from "./components/image-filters/types";
 
 export const supportedMimeTypes: string[] = [
@@ -53,5 +55,6 @@ export const imageFiltersInitState: FiltersState = {
   huerotate: 0,
   contrast: 0,
   unsharpen: 0,
-  invertColors: false
+  invertColors: false,
+  cropProps: cropInitProps,
 };

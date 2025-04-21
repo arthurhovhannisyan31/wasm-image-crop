@@ -4,22 +4,11 @@ import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 import { Box } from "@mui/material";
 
 import { CROP_MASK_ID } from "./constants";
-import { isBottomRightCorner } from "./helpers";
+import { CropMaskRef, getCropMaskRef, isBottomRightCorner } from "./helpers";
 import { containerStyles, resizeImageStyles } from "./styles";
 
-export interface CropMaskDimensions {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-export interface CropMaskRefProps {
-  getCropData: () => CropMaskDimensions;
-}
-
 export interface CropMaskProps {
-  ref: (val: CropMaskRefProps) => void; // TODO Ref with getCropData method
+  ref: (val: CropMaskRef) => void; // TODO Ref with getCropData method
 }
 
 export const CropMask: FC<CropMaskProps> = ({
@@ -115,24 +104,13 @@ export const CropMask: FC<CropMaskProps> = ({
 
   useEffect(() => {
     if (cropRef.current) {
-      containerRect.current = cropRef.current?.getBoundingClientRect();
+      containerRect.current = cropRef.current.getBoundingClientRect();
     }
   }, []);
 
   useImperativeHandle(
     ref,
-    () => ({
-      getCropData: () => {
-        const cropRect = cropRef.current?.getBoundingClientRect();
-
-        return {
-          x: cropRect?.x ?? 0,
-          y: cropRect?.y ?? 0,
-          width: cropRect?.width ?? 0,
-          height: cropRect?.height ?? 0,
-        };
-      }
-    })
+    () => getCropMaskRef(cropRef, containerRect)
   );
 
   return (
@@ -143,7 +121,6 @@ export const CropMask: FC<CropMaskProps> = ({
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
     >
-      {/* TODO Add divider 2 horizontal 2 vertical */}
       <UnfoldMoreIcon sx={resizeImageStyles} />
     </Box>
   );

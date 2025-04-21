@@ -7,7 +7,7 @@ import { convertFileToDataURL } from "utility/helpers/image";
 import { useDnDEvent } from "utility/hooks/useDnDEvent";
 import { useInitWasm } from "utility/hooks/useInitWasm";
 
-import { CropMaskRefProps } from "./components/crop-mask";
+import { CropMaskRef } from "./components/crop-mask/helpers";
 import { ImageContainer } from "./components/image-container";
 import { ImageControls } from "./components/image-controls";
 import { ImageFilters } from "./components/image-filters";
@@ -22,7 +22,7 @@ export const EditorContainer: FC = () => {
   const [imageData, setImageData] = useState<string>();
   const [processedImageData, setProcessedImageData] = useState<string>();
   const [filtersState, setFiltersState] = useState<FiltersState>(imageFiltersInitState);
-  const imageCropRef = useRef<CropMaskRefProps>(null);
+  const cropMaskRef = useRef<CropMaskRef>(null);
 
   const { isDragOver, ref } = useDnDEvent();
 
@@ -74,11 +74,13 @@ export const EditorContainer: FC = () => {
   }, [wasm]);
 
   const handleResetState = () => {
+    cropMaskRef.current?.reset();
     setFiltersState(imageFiltersInitState);
     setProcessedImageData(undefined);
   };
 
   const handleClearState = () => {
+    cropMaskRef.current?.reset();
     handleResetState();
     setImageData(undefined);
   };
@@ -95,14 +97,14 @@ export const EditorContainer: FC = () => {
     );
   };
 
-  const setCropRef = (ref: CropMaskRefProps) => {
+  const setCropRef = (ref: CropMaskRef) => {
     if (ref) {
-      imageCropRef.current = ref;
+      cropMaskRef.current = ref;
     }
   };
 
   const handleImageCrop = () => {
-    console.log(imageCropRef.current?.getCropData());
+    console.log(cropMaskRef.current?.getCropData());
     // set to state
     // call processImageData
   };
@@ -129,6 +131,7 @@ export const EditorContainer: FC = () => {
         invertColors={filtersState.invertColors}
         disabled={disableControls}
         crop={handleImageCrop}
+        cropProps={filtersState.cropProps}
       />
       <ImageContainer
         isDragOver={isDragOver}
