@@ -1,5 +1,5 @@
 import { errorsDict, FILE_SIZE_LIMIT_MB, supportedMimeTypes } from "./constants";
-import { convertFileToDataURL } from "../../utility/helpers/image";
+import { convertFileToDataURL, createImage } from "../../utility/helpers/image";
 
 export const imageFileValidation = (
   files: FileList,
@@ -39,7 +39,8 @@ export const imageFileValidation = (
 
 export const processFiles = (
   setRawImageData: (val: string | undefined) => void,
-  setProcessedImageData: (val: string | undefined) => void
+  setProcessedImageData: (val: string | undefined) => void,
+  setRawImageElement: (val: HTMLImageElement) => void
 ) => async (
   files: FileList | null | undefined,
 ): Promise<void> => {
@@ -52,8 +53,10 @@ export const processFiles = (
 
   try {
     const imageData = await convertFileToDataURL(files[0]);
+    const imageElement = await createImage(imageData);
 
-    setRawImageData(imageData);
+    setRawImageData(imageElement.src);
+    setRawImageElement(imageElement);
     setProcessedImageData(undefined);
   } catch (e) {
     console.log(e);

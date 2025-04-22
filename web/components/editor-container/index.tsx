@@ -19,17 +19,21 @@ import type { FiltersState } from "./components/image-filters/types";
 export const EditorContainer: FC = () => {
   const [rawImageData, setRawImageData] = useState<string>();
   const [processedImageData, setProcessedImageData] = useState<string>();
+  const [rawImageElement, setRawImageElement] = useState<HTMLImageElement>();
   const [filtersState, setFiltersState] = useState<FiltersState>(imageFiltersInitState);
   const cropMaskRef = useRef<CropMaskRef>(null);
+
   const imageElement = useGetImageElement(rawImageData, processedImageData);
-
   const { isDragOver, ref } = useDnDEvent();
-
-  const curriedProcessFiles = useMemo(
-    () => processFiles(setRawImageData, setProcessedImageData), []
-  );
-
   const processImageData = useProcessImageData(setProcessedImageData);
+  const curriedProcessFiles = useMemo(
+    () => processFiles(
+      setRawImageData,
+      setProcessedImageData,
+      setRawImageElement
+    ),
+    []
+  );
 
   const handleResetState = () => {
     cropMaskRef.current?.reset();
@@ -48,6 +52,7 @@ export const EditorContainer: FC = () => {
     const newFiltersState = handleFiltersState(filtersState);
 
     setFiltersState(newFiltersState);
+
     processImageData(
       rawImageData as string,
       newFiltersState
@@ -64,9 +69,12 @@ export const EditorContainer: FC = () => {
     if (!cropMaskRef.current) {
       return;
     }
+
     handleFiltersChange(state => ({
       ...state,
-      cropProps: (cropMaskRef.current as CropMaskRef).getCropData()
+      cropProps: (cropMaskRef.current as CropMaskRef).getCropMaskData(
+        rawImageElement?.width as number
+      )
     }));
   };
 

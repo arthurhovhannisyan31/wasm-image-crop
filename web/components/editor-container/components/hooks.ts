@@ -4,12 +4,14 @@ import { createImage } from "utility/helpers/image";
 import { useInitWasm } from "utility/hooks/useInitWasm";
 
 import { IMAGE_META_DATA_REGEX } from "../constants";
-
-import type { FiltersState } from "./image-filters/types";
+import { type CropProps, type FiltersState } from "./image-filters/types";
 
 export const useProcessImageData = (
   setImageData: (val: string) => void
-): ((imageData: string, filtersState: FiltersState) => void) => {
+): ((
+    imageData: string,
+    filtersState: FiltersState
+  ) => void) => {
   const wasm = useInitWasm();
 
   return useCallback((
@@ -17,6 +19,12 @@ export const useProcessImageData = (
     filtersState: FiltersState,
   ) => {
     try {
+      console.log(filtersState.cropProps);
+      const cropRatio = filtersState.cropProps.crop_ratio;
+      // const newCropProps: CropProps = {
+      //   //
+      // };
+
       const headlessImageData = imageData.replace(IMAGE_META_DATA_REGEX, "");
       const image_base64_data = wasm?.process_image(
         headlessImageData,

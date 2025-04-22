@@ -12,7 +12,7 @@ export const isBottomRightCorner = (
 ): boolean => (x0 - x1) < BOTTOM_RIGHT_CORNER_THRESHOLD || (y0 - y1) < BOTTOM_RIGHT_CORNER_THRESHOLD;
 
 export interface CropMaskRef {
-  getCropData: () => CropProps;
+  getCropMaskData: (val: number) => CropProps;
   reset: () => void;
 }
 
@@ -21,7 +21,9 @@ export const getCropMaskRef = (
   containerRect: RefObject<DOMRect | null>
 ): CropMaskRef => {
   return {
-    getCropData: () => {
+    getCropMaskData: (
+      rawImageWidth: number
+    ) => {
       const cropRect = cropRef.current?.getBoundingClientRect();
 
       if (!cropRect || !containerRect.current) {
@@ -33,6 +35,7 @@ export const getCropMaskRef = (
         crop_y: cropRect.top - containerRect.current.top,
         crop_width: cropRect.width,
         crop_height: cropRect.height,
+        crop_ratio: rawImageWidth / containerRect.current.width
       };
     },
     reset: () => {

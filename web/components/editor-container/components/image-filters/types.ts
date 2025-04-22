@@ -17,4 +17,5 @@ export interface CropProps {
   crop_y: number;
   crop_width: number;
   crop_height: number;
+  crop_ratio: number;
 }

@@ -8,4 +8,5 @@ export const cropInitProps: CropProps = {
   crop_y: 0,
   crop_width: 0,
   crop_height: 0,
+  crop_ratio: 0
 };
