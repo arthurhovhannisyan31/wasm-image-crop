@@ -18,7 +18,7 @@ export const ImageControls: FC<ImageControlsProps> = ({
   downloadActive
 }) => {
   return (
-    <Box display="flex" justifyContent="space-between">
+    <Box display="flex" justifyContent="space-between" width="500px">
       <Button
         onClick={clearState}
         variant="contained"

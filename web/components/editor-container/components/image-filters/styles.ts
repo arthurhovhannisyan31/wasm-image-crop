@@ -9,7 +9,8 @@ export const controlsContainer: SxProps = {
   marginTop: "40px",
   "& .Mui-disabled > svg > path": {
     fill: grey[500]
-  }
+  },
+  width: "500px"
 };
 
 export const smallControlsContainerStyles: SxProps = {

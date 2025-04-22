@@ -29,6 +29,11 @@ fn apply_image_filters(
   let dimensions = &img.dimensions();
   log(&format!("{:?}", dimensions).into());
 
+  log(&format!("{:?}", crop_x).into());
+  log(&format!("{:?}", crop_y).into());
+  log(&format!("{:?}", crop_width).into());
+  log(&format!("{:?}", crop_height).into());
+
   if grayscale_flag {
     *img = img.grayscale();
     log(&"Grayscale effect applied".into());

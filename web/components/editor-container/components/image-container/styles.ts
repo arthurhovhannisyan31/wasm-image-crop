@@ -10,8 +10,8 @@ export const getContainerStyles = (
   isDragOver: boolean
 ): SxProps => ({
   display: "flex",
-  width: "500px",
-  height: "500px",
+  maxWidth: "600px",
+  maxHeight: "600px",
   backgroundClip: "padding-box",
   backdropFilter: "blur(24px)",
   border: "1px solid grey",
@@ -26,5 +26,6 @@ export const imageStyles: CSSProperties = {
 };
 
 export const contentStyles: SxProps = {
+  display: "flex",
   position: "relative"
 };

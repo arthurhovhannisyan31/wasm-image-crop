@@ -3,7 +3,7 @@ import { type FC, useCallback, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import { isEqual } from "lodash-es";
 
-import { convertFileToDataURL } from "utility/helpers/image";
+import { getImageFromFile } from "utility/helpers/image";
 import { useDnDEvent } from "utility/hooks/useDnDEvent";
 import { useInitWasm } from "utility/hooks/useInitWasm";
 
@@ -16,11 +16,12 @@ import { imageFileValidation } from "./helpers";
 import { containerStyles } from "./styles";
 
 import type { FiltersState } from "./components/image-filters/types";
+import type { ImageData } from "./types";
 
 export const EditorContainer: FC = () => {
   const wasm = useInitWasm();
-  const [imageData, setImageData] = useState<string>();
-  const [processedImageData, setProcessedImageData] = useState<string>();
+  const [imageData, setImageData] = useState<ImageData | undefined>();
+  const [processedImage, setProcessedImage] = useState<string>();
   const [filtersState, setFiltersState] = useState<FiltersState>(imageFiltersInitState);
   const cropMaskRef = useRef<CropMaskRef>(null);
 
@@ -35,10 +36,10 @@ export const EditorContainer: FC = () => {
     }
 
     try {
-      const imageData = await convertFileToDataURL(files[0]);
+      const imageData = await getImageFromFile(files[0]);
 
       setImageData(imageData);
-      setProcessedImageData(undefined);
+      setProcessedImage(undefined);
     } catch (e) {
       console.log(e);
       console.log(errorsDict.fileParsing);
@@ -62,11 +63,16 @@ export const EditorContainer: FC = () => {
         filtersState.brighten,
         filtersState.huerotate,
         filtersState.contrast,
-        filtersState.unsharpen
+        filtersState.unsharpen,
+        // Use ratio to adjust x, y, with and height
+        filtersState.cropProps.crop_x,
+        filtersState.cropProps.crop_y,
+        filtersState.cropProps.crop_width,
+        filtersState.cropProps.crop_height,
       );
 
       if (image_base64_data) {
-        setProcessedImageData(image_base64_data);
+        setProcessedImage(image_base64_data);
       }
     } catch (e) {
       console.log(e);
@@ -76,11 +82,10 @@ export const EditorContainer: FC = () => {
   const handleResetState = () => {
     cropMaskRef.current?.reset();
     setFiltersState(imageFiltersInitState);
-    setProcessedImageData(undefined);
+    setProcessedImage(undefined);
   };
 
   const handleClearState = () => {
-    cropMaskRef.current?.reset();
     handleResetState();
     setImageData(undefined);
   };
@@ -92,7 +97,7 @@ export const EditorContainer: FC = () => {
 
     setFiltersState(newFiltersState);
     processImageData(
-      imageData as string,
+      imageData?.src as string,
       newFiltersState
     );
   };
@@ -104,9 +109,13 @@ export const EditorContainer: FC = () => {
   };
 
   const handleImageCrop = () => {
-    console.log(cropMaskRef.current?.getCropData());
-    // set to state
-    // call processImageData
+    if (!cropMaskRef.current) {
+      return;
+    }
+    handleFiltersChange(state => ({
+      ...state,
+      cropProps: (cropMaskRef.current as CropMaskRef).getCropData()
+    }));
   };
 
   const disableControls = !imageData;
@@ -135,7 +144,8 @@ export const EditorContainer: FC = () => {
       />
       <ImageContainer
         isDragOver={isDragOver}
-        imageData={processedImageData ?? imageData ?? ""}
+        imageData={imageData}
+        processedImage={processedImage}
         processFiles={processFiles}
         cropRef={setCropRef}
       />
