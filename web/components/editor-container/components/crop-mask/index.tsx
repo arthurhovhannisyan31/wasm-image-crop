@@ -16,6 +16,7 @@ export const CropMask: FC<CropMaskProps> = ({
 }) => {
   const cropRef = useRef<HTMLDivElement>(null);
   const containerRect = useRef<DOMRect>(null);
+
   const position = useRef({
     x0: 0,
     y0: 0,
