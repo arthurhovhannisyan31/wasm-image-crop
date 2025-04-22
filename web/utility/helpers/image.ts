@@ -50,8 +50,12 @@ export const getNormalizedImageDimensions = (
   width: number,
   height: number,
 ): ImageDimensions => {
-  const imgRatio = width / height;
+  let imgRatio = width / height;
   const baseRatio = baseImageDimensions.width / baseImageDimensions.height;
+
+  if (Number.isNaN(imgRatio)) {
+    imgRatio = 1;
+  }
 
   if (imgRatio > baseRatio) {
     return {
