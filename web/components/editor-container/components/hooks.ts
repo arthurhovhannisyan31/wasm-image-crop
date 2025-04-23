@@ -10,22 +10,36 @@ export const useProcessImageData = (
   setImageData: (val: string) => void
 ): ((
     imageData: string,
+    rawImageElement: HTMLImageElement,
     filtersState: FiltersState
   ) => void) => {
   const wasm = useInitWasm();
 
   return useCallback((
     imageData: string,
+    rawImageElement: HTMLImageElement,
     filtersState: FiltersState,
   ) => {
     try {
-      console.log(filtersState.cropProps);
-      const cropRatio = filtersState.cropProps.crop_ratio;
-      // const newCropProps: CropProps = {
-      //   //
-      // };
+      const cropRatio = filtersState.cropProps.crop_ratio || 1;
+
+      const cropProps: CropProps = {
+        crop_x: Math.floor(filtersState.cropProps.crop_x * cropRatio),
+        crop_y: Math.floor(filtersState.cropProps.crop_y * cropRatio),
+        crop_width: Math.floor(
+          /* fallback to original width if filter was not modified from 0 to other value */
+          (filtersState.cropProps.crop_width || rawImageElement.width) * cropRatio
+        ),
+        crop_height: Math.floor(
+          /* fallback to original width if filter was not modified from 0 to other value */
+          (filtersState.cropProps.crop_height || rawImageElement.height) * cropRatio
+        ),
+        crop_ratio: 0
+      };
 
       const headlessImageData = imageData.replace(IMAGE_META_DATA_REGEX, "");
+
+      performance.mark("start");
       const image_base64_data = wasm?.process_image(
         headlessImageData,
         filtersState.grayScale,
@@ -38,11 +52,16 @@ export const useProcessImageData = (
         filtersState.huerotate,
         filtersState.contrast,
         filtersState.unsharpen,
-        // Use ratio to adjust x, y, with and height
-        filtersState.cropProps.crop_x,
-        filtersState.cropProps.crop_y,
-        filtersState.cropProps.crop_width,
-        filtersState.cropProps.crop_height,
+        cropProps.crop_x,
+        cropProps.crop_y,
+        cropProps.crop_width,
+        cropProps.crop_height,
+      );
+      performance.mark("end");
+      performance.measure("measure", "start", "end");
+      console.log(
+        "image processing duration: ",
+        performance.getEntriesByName("measure").map(({ duration }) => duration),
       );
 
       if (image_base64_data) {

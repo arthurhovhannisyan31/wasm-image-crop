@@ -55,6 +55,7 @@ export const EditorContainer: FC = () => {
 
     processImageData(
       rawImageData as string,
+      rawImageElement as HTMLImageElement,
       newFiltersState
     );
   };

@@ -24,7 +24,7 @@ export const iconButtonStyles: SxProps = {
   color: blue[500]
 };
 
-export const flipHorizontallyIconStyles: SxProps = {
+export const flipVIconStyles: SxProps = {
   ...iconButtonStyles,
   rotate: "90deg",
 };

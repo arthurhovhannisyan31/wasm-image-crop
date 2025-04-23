@@ -26,17 +26,14 @@ fn apply_image_filters(
   crop_width: u32,
   crop_height: u32,
 ) {
-  let dimensions = &img.dimensions();
-  log(&format!("{:?}", dimensions).into());
+  let (image_width, image_height) = &img.dimensions();
 
-  log(&format!("{:?}", crop_x).into());
-  log(&format!("{:?}", crop_y).into());
-  log(&format!("{:?}", crop_width).into());
-  log(&format!("{:?}", crop_height).into());
+  if crop_width != *image_width && crop_height != *image_height {
+    *img = img.crop_imm(crop_x, crop_y, crop_width, crop_height);
+  }
 
   if grayscale_flag {
     *img = img.grayscale();
-    log(&"Grayscale effect applied".into());
   }
 
   if flip_vertically_flag {

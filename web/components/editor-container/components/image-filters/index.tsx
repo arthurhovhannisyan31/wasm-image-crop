@@ -13,7 +13,7 @@ import { ImageFilter } from "components/editor-container/constants";
 import { imageFiltersReducer } from "./helpers";
 import {
   controlsContainer,
-  flipHorizontallyIconStyles,
+  flipVIconStyles,
   iconButtonStyles,
   sliderControlsContainerStyles,
   smallControlsContainerStyles
@@ -82,7 +82,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             onChange={() => handleChange(ImageFilter.FlipVertically)}
             disabled={disabled}
           >
-            <FlipIcon sx={iconButtonStyles} />
+            <FlipIcon sx={flipVIconStyles} />
           </ToggleButton>
         </Tooltip>
         <Tooltip title="Flip horizontally">
@@ -92,7 +92,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             onChange={() => handleChange(ImageFilter.FlipHorizontally)}
             disabled={disabled}
           >
-            <FlipIcon sx={flipHorizontallyIconStyles} />
+            <FlipIcon sx={iconButtonStyles} />
           </ToggleButton>
         </Tooltip>
         <Tooltip title="Rotate left">
@@ -117,7 +117,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             onClick={crop}
             disabled={disabled}
           >
-            <CropIcon sx={flipHorizontallyIconStyles} />
+            <CropIcon sx={iconButtonStyles} />
           </ToggleButton>
         </Tooltip>
       </Box>

@@ -3,38 +3,35 @@ import { convertFileToDataURL, createImage } from "../../utility/helpers/image";
 
 export const imageFileValidation = (
   files: FileList,
-  // setSnackbarProps: (message: string, severity: AlertProps["severity"]) => void,
 ): boolean => {
   if (!files.length) return false;
 
   if (files.length > 1) {
-    // setSnackbarProps(
-    //   errorsDict.filesQuantity,
-    //   "warning",
-    // );
+    alert(errorsDict.filesQuantity);
+
     return false;
   }
   const file = files[0];
 
   if (!file.type) {
-    // setSnackbarProps(
-    //   errorsDict.fileType,
-    //   "error",
-    // );
+    alert(errorsDict.fileType);
 
     return false;
   }
 
   if (!supportedMimeTypes.includes(file.type)) {
-    // setSnackbarProps(
-    //   errorsDict.filesExtension,
-    //   "error",
-    // );
+    alert(errorsDict.filesExtension);
 
     return false;
   }
 
-  return file.size <= FILE_SIZE_LIMIT_MB;
+  if (file.size > FILE_SIZE_LIMIT_MB) {
+    alert(errorsDict.fileSize);
+
+    return false;
+  }
+
+  return true;
 };
 
 export const processFiles = (
