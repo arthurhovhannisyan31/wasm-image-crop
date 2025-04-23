@@ -54,12 +54,6 @@ export const imageFiltersReducer = (
         rotate: rotateAngleCalculator(RotateAngle.Right, state.rotate),
       };
     }
-    case ImageFilter.Crop: {
-      return {
-        ...state,
-        showCrop: !state.showCrop
-      };
-    }
     case ImageFilter.Blur:
     case ImageFilter.Brighten:
     case ImageFilter.Huerotate:

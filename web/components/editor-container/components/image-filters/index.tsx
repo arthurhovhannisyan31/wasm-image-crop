@@ -13,7 +13,7 @@ import { ImageFilter } from "components/editor-container/constants";
 import { imageFiltersReducer } from "./helpers";
 import {
   controlsContainer,
-  flipHorizontallyIconStyles,
+  flipVIconStyles,
   iconButtonStyles,
   sliderControlsContainerStyles,
   smallControlsContainerStyles
@@ -24,12 +24,12 @@ export interface ImageFiltersProps
   extends FiltersState {
   setFiltersState: (val: (val: FiltersState) => FiltersState) => void;
   disabled: boolean;
+  crop: () => void;
 }
 
 export const ImageFilters: FC<ImageFiltersProps> = ({
   setFiltersState,
   grayScale,
-  showCrop,
   flipHorizontally,
   flipVertically,
   blur,
@@ -38,7 +38,8 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
   contrast,
   unsharpen,
   disabled,
-  invertColors
+  invertColors,
+  crop
 }) => {
   const handleChange = (
     imageEffect: string,
@@ -64,6 +65,16 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             <ContrastIcon sx={iconButtonStyles} />
           </ToggleButton>
         </Tooltip>
+        <Tooltip title="Invert Colors">
+          <ToggleButton
+            value={ImageFilter.Invert}
+            selected={invertColors}
+            onClick={_ => handleChange(ImageFilter.Invert)}
+            disabled={disabled}
+          >
+            <InvertColorsIcon sx={iconButtonStyles} />
+          </ToggleButton>
+        </Tooltip>
         <Tooltip title="Flip vertically">
           <ToggleButton
             value={ImageFilter.FlipVertically}
@@ -71,7 +82,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             onChange={() => handleChange(ImageFilter.FlipVertically)}
             disabled={disabled}
           >
-            <FlipIcon sx={iconButtonStyles} />
+            <FlipIcon sx={flipVIconStyles} />
           </ToggleButton>
         </Tooltip>
         <Tooltip title="Flip horizontally">
@@ -81,27 +92,7 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             onChange={() => handleChange(ImageFilter.FlipHorizontally)}
             disabled={disabled}
           >
-            <FlipIcon sx={flipHorizontallyIconStyles} />
-          </ToggleButton>
-        </Tooltip>
-        <Tooltip title="Crop">
-          <ToggleButton
-            value={ImageFilter.Crop}
-            selected={showCrop}
-            onClick={_ => handleChange(ImageFilter.Crop)}
-            disabled={disabled}
-          >
-            <CropIcon sx={flipHorizontallyIconStyles} />
-          </ToggleButton>
-        </Tooltip>
-        <Tooltip title="Invert Colors">
-          <ToggleButton
-            value={ImageFilter.Invert}
-            selected={invertColors}
-            onClick={_ => handleChange(ImageFilter.Invert)}
-            disabled={disabled}
-          >
-            <InvertColorsIcon sx={iconButtonStyles} />
+            <FlipIcon sx={iconButtonStyles} />
           </ToggleButton>
         </Tooltip>
         <Tooltip title="Rotate left">
@@ -119,6 +110,15 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
           >
             <RotateRightIcon sx={iconButtonStyles} />
           </IconButton>
+        </Tooltip>
+        <Tooltip title="Crop">
+          <ToggleButton
+            value={ImageFilter.Crop}
+            onClick={crop}
+            disabled={disabled}
+          >
+            <CropIcon sx={iconButtonStyles} />
+          </ToggleButton>
         </Tooltip>
       </Box>
       <Box sx={sliderControlsContainerStyles}>
@@ -187,8 +187,6 @@ export const ImageFilters: FC<ImageFiltersProps> = ({
             max={100}
           />
         </Box>
-        Crop
-        Resize
       </Box>
     </Box>
   );

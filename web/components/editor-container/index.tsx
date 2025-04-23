@@ -1,82 +1,49 @@
-import { type FC, useCallback, useState } from "react";
+import { type FC, useMemo, useRef, useState } from "react";
 
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
+import { isEqual } from "lodash-es";
 
-import { convertFileToDataURL } from "utility/helpers/image";
 import { useDnDEvent } from "utility/hooks/useDnDEvent";
-import { useInitWasm } from "utility/hooks/useInitWasm";
 
+import { CropMaskRef } from "./components/crop-mask/helpers";
+import { useGetImageElement, useProcessImageData } from "./components/hooks";
 import { ImageContainer } from "./components/image-container";
+import { ImageControls } from "./components/image-controls";
 import { ImageFilters } from "./components/image-filters";
-import { errorsDict, IMAGE_META_DATA_REGEX, imageFiltersInitState } from "./constants";
-import { imageFileValidation } from "./helpers";
+import { imageFiltersInitState } from "./constants";
+import { processFiles } from "./helpers";
 import { containerStyles } from "./styles";
 
 import type { FiltersState } from "./components/image-filters/types";
 
 export const EditorContainer: FC = () => {
-  const wasm = useInitWasm();
-  const [imageData, setImageData] = useState<string>();
+  const [rawImageData, setRawImageData] = useState<string>();
   const [processedImageData, setProcessedImageData] = useState<string>();
+  const [rawImageElement, setRawImageElement] = useState<HTMLImageElement>();
   const [filtersState, setFiltersState] = useState<FiltersState>(imageFiltersInitState);
+  const cropMaskRef = useRef<CropMaskRef>(null);
 
+  const imageElement = useGetImageElement(rawImageData, processedImageData);
   const { isDragOver, ref } = useDnDEvent();
-
-  const processFiles = async (files: FileList | null | undefined) => {
-    if (!files) {
-      return;
-    }
-    if (!imageFileValidation(files)) {
-      return;
-    }
-
-    try {
-      const imageData = await convertFileToDataURL(files[0]);
-
-      setImageData(imageData);
-      setProcessedImageData(undefined);
-    } catch (e) {
-      console.log(e);
-      console.log(errorsDict.fileParsing);
-    }
-  };
-
-  const processImageData = useCallback((
-    imageData: string,
-    filtersState: FiltersState
-  ) => {
-    try {
-      const headlessImageData = imageData.replace(IMAGE_META_DATA_REGEX, "");
-      const image_base64_data = wasm?.process_image(
-        headlessImageData,
-        filtersState.grayScale,
-        filtersState.flipVertically,
-        filtersState.flipHorizontally,
-        filtersState.invertColors,
-        filtersState.rotate,
-        filtersState.blur,
-        filtersState.brighten,
-        filtersState.huerotate,
-        filtersState.contrast,
-        filtersState.unsharpen
-      );
-
-      if (image_base64_data) {
-        setProcessedImageData(image_base64_data);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }, [wasm]);
+  const processImageData = useProcessImageData(setProcessedImageData);
+  const curriedProcessFiles = useMemo(
+    () => processFiles(
+      setRawImageData,
+      setProcessedImageData,
+      setRawImageElement
+    ),
+    []
+  );
 
   const handleResetState = () => {
+    cropMaskRef.current?.reset();
     setFiltersState(imageFiltersInitState);
     setProcessedImageData(undefined);
   };
 
   const handleClearState = () => {
     handleResetState();
-    setImageData(undefined);
+    setRawImageData(undefined);
   };
 
   const handleFiltersChange = (
@@ -85,13 +52,35 @@ export const EditorContainer: FC = () => {
     const newFiltersState = handleFiltersState(filtersState);
 
     setFiltersState(newFiltersState);
+
     processImageData(
-      imageData as string,
+      rawImageData as string,
+      rawImageElement as HTMLImageElement,
       newFiltersState
     );
   };
 
-  const disableControls = !imageData;
+  const setCropRef = (ref: CropMaskRef) => {
+    if (ref) {
+      cropMaskRef.current = ref;
+    }
+  };
+
+  const handleImageCrop = () => {
+    if (!cropMaskRef.current) {
+      return;
+    }
+
+    handleFiltersChange(state => ({
+      ...state,
+      cropProps: (cropMaskRef.current as CropMaskRef).getCropMaskData(
+        rawImageElement?.width as number
+      )
+    }));
+  };
+
+  const disableControls = !rawImageData;
+  const isDownloadActive = isEqual(imageFiltersInitState, filtersState);
 
   return (
     <Box
@@ -103,7 +92,6 @@ export const EditorContainer: FC = () => {
         grayScale={filtersState.grayScale}
         flipHorizontally={filtersState.flipHorizontally}
         flipVertically={filtersState.flipVertically}
-        showCrop={filtersState.showCrop}
         rotate={filtersState.rotate}
         blur={filtersState.blur}
         brighten={filtersState.brighten}
@@ -112,30 +100,25 @@ export const EditorContainer: FC = () => {
         unsharpen={filtersState.unsharpen}
         invertColors={filtersState.invertColors}
         disabled={disableControls}
+        crop={handleImageCrop}
+        cropProps={filtersState.cropProps}
       />
       <ImageContainer
         isDragOver={isDragOver}
-        imageData={processedImageData ?? imageData ?? ""}
-        processFiles={processFiles}
+        imageData={processedImageData ?? rawImageData}
+        imageElement={imageElement}
+        processFiles={curriedProcessFiles}
+        cropRef={setCropRef}
       />
-      <Box display="flex" justifyContent="space-around">
-        <Button
-          onClick={handleResetState}
-          variant="contained"
-          color="info"
-          disabled={disableControls}
-        >
-          Reset
-        </Button>
-        <Button
-          onClick={handleClearState}
-          variant="contained"
-          color="warning"
-          disabled={disableControls}
-        >
-          Clear
-        </Button>
-      </Box>
+      <ImageControls
+        disabled={disableControls}
+        downloadActive={isDownloadActive}
+        clearState={handleClearState}
+        resetState={handleResetState}
+        downloadImage={() => {
+          // TODO Implement
+        }}
+      />
     </Box>
   );
 };
