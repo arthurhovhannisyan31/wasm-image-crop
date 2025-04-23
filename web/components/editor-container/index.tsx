@@ -11,24 +11,24 @@ import { ImageContainer } from "./components/image-container";
 import { ImageControls } from "./components/image-controls";
 import { ImageFilters } from "./components/image-filters";
 import { imageFiltersInitState } from "./constants";
-import { processFiles } from "./helpers";
+import { downloadImg, processFiles } from "./helpers";
 import { containerStyles } from "./styles";
 
 import type { FiltersState } from "./components/image-filters/types";
 
 export const EditorContainer: FC = () => {
-  const [rawImageData, setRawImageData] = useState<string>();
-  const [processedImageData, setProcessedImageData] = useState<string>();
+  const [rawFileObject, setRawFileObject] = useState<File | undefined>();
   const [rawImageElement, setRawImageElement] = useState<HTMLImageElement>();
+  const [processedImageData, setProcessedImageData] = useState<string>();
   const [filtersState, setFiltersState] = useState<FiltersState>(imageFiltersInitState);
   const cropMaskRef = useRef<CropMaskRef>(null);
 
-  const imageElement = useGetImageElement(rawImageData, processedImageData);
+  const imageElement = useGetImageElement(rawImageElement?.src, processedImageData);
   const { isDragOver, ref } = useDnDEvent();
   const processImageData = useProcessImageData(setProcessedImageData);
   const curriedProcessFiles = useMemo(
     () => processFiles(
-      setRawImageData,
+      setRawFileObject,
       setProcessedImageData,
       setRawImageElement
     ),
@@ -43,7 +43,7 @@ export const EditorContainer: FC = () => {
 
   const handleClearState = () => {
     handleResetState();
-    setRawImageData(undefined);
+    setRawImageElement(undefined);
   };
 
   const handleFiltersChange = (
@@ -54,7 +54,6 @@ export const EditorContainer: FC = () => {
     setFiltersState(newFiltersState);
 
     processImageData(
-      rawImageData as string,
       rawImageElement as HTMLImageElement,
       newFiltersState
     );
@@ -79,8 +78,17 @@ export const EditorContainer: FC = () => {
     }));
   };
 
-  const disableControls = !rawImageData;
+  const disableControls = !rawImageElement;
   const isDownloadActive = isEqual(imageFiltersInitState, filtersState);
+
+  const handleImageDownload = () => {
+    if (processedImageData && rawFileObject) {
+      downloadImg(
+        processedImageData as string,
+        rawFileObject as File
+      );
+    }
+  };
 
   return (
     <Box
@@ -105,7 +113,7 @@ export const EditorContainer: FC = () => {
       />
       <ImageContainer
         isDragOver={isDragOver}
-        imageData={processedImageData ?? rawImageData}
+        imageData={processedImageData ?? rawImageElement?.src}
         imageElement={imageElement}
         processFiles={curriedProcessFiles}
         cropRef={setCropRef}
@@ -115,9 +123,7 @@ export const EditorContainer: FC = () => {
         downloadActive={isDownloadActive}
         clearState={handleClearState}
         resetState={handleResetState}
-        downloadImage={() => {
-          // TODO Implement
-        }}
+        downloadImage={handleImageDownload}
       />
     </Box>
   );

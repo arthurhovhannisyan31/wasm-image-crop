@@ -9,14 +9,12 @@ import { type CropProps, type FiltersState } from "./image-filters/types";
 export const useProcessImageData = (
   setImageData: (val: string) => void
 ): ((
-    imageData: string,
     rawImageElement: HTMLImageElement,
     filtersState: FiltersState
   ) => void) => {
   const wasm = useInitWasm();
 
   return useCallback((
-    imageData: string,
     rawImageElement: HTMLImageElement,
     filtersState: FiltersState,
   ) => {
@@ -37,7 +35,7 @@ export const useProcessImageData = (
         crop_ratio: 0
       };
 
-      const headlessImageData = imageData.replace(IMAGE_META_DATA_REGEX, "");
+      const headlessImageData = rawImageElement.src.replace(IMAGE_META_DATA_REGEX, "");
 
       performance.mark("start");
       const image_base64_data = wasm?.process_image(
