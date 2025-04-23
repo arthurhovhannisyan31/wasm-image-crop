@@ -2,16 +2,20 @@ import type { CSSProperties } from "react";
 
 import type { SxProps } from "@mui/material";
 
+import { MAX_HEIGHT, MAX_WIDTH } from "./constants";
+
 export const inputStyles: SxProps = {
   display: "none",
 };
 
 export const getContainerStyles = (
-  isDragOver: boolean
+  isDragOver: boolean,
+  width: number = MAX_WIDTH,
+  height: number = MAX_HEIGHT
 ): SxProps => ({
   display: "flex",
-  width: "500px",
-  height: "500px",
+  width,
+  height,
   backgroundClip: "padding-box",
   backdropFilter: "blur(24px)",
   border: "1px solid grey",
@@ -26,5 +30,6 @@ export const imageStyles: CSSProperties = {
 };
 
 export const contentStyles: SxProps = {
+  display: "flex",
   position: "relative"
 };

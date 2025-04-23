@@ -1,15 +1,22 @@
-import { type FC, type PointerEvent, useEffect, useRef } from "react";
+import { type FC, type PointerEvent, useEffect, useImperativeHandle, useRef } from "react";
 
-import AspectRatioIcon from "@mui/icons-material/AspectRatio";
+import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 import { Box } from "@mui/material";
 
 import { CROP_MASK_ID } from "./constants";
-import { isBottomRightCorner } from "./helpers";
-import { containerStyles } from "./styles";
+import { CropMaskRef, getCropMaskRef, isBottomRightCorner } from "./helpers";
+import { containerStyles, resizeImageStyles } from "./styles";
 
-export const CropMask: FC = () => {
-  const ref = useRef<HTMLDivElement>(null);
+export interface CropMaskProps {
+  ref: (val: CropMaskRef) => void; // TODO Ref with getCropData method
+}
+
+export const CropMask: FC<CropMaskProps> = ({
+  ref
+}) => {
+  const cropRef = useRef<HTMLDivElement>(null);
   const containerRect = useRef<DOMRect>(null);
+
   const position = useRef({
     x0: 0,
     y0: 0,
@@ -18,85 +25,104 @@ export const CropMask: FC = () => {
   });
 
   const handlePointerDown = (e: PointerEvent) => {
-    if (ref.current) {
-      const rect = ref.current?.getBoundingClientRect();
-      if (isBottomRightCorner(rect.right, rect.bottom, e.clientX, e.clientY)) {
-        // do not prevent default to allow resize
-        // TODO prevent change size overflow
-        return;
-      }
+    // get the mouse cursor position at startup:
+    position.current.x0 = e.clientX;
+    position.current.y0 = e.clientY;
 
-      e.preventDefault();
+    cropRef.current?.setPointerCapture(e.pointerId);
 
-      // get the mouse cursor position at startup:
-      position.current.x0 = e.clientX;
-      position.current.y0 = e.clientY;
-
-      ref.current.onpointermove = slide;
+    if (!cropRef.current) {
+      return;
     }
-    ref.current?.setPointerCapture(e.pointerId);
+
+    const elementRect = cropRef.current.getBoundingClientRect();
+
+    if (isBottomRightCorner(elementRect.right, elementRect.bottom, e.clientX, e.clientY)) {
+      return;
+    }
+
+    e.preventDefault();
+
+    cropRef.current.onpointermove = slide;
   };
 
   const handlePointerUp = (e: PointerEvent) => {
-    if (ref.current) {
-      ref.current.onpointermove = null;
+    if (!cropRef.current || !containerRect.current) {
+      return;
     }
-    ref.current?.releasePointerCapture(e.pointerId);
+
+    cropRef.current.releasePointerCapture(e.pointerId);
+    cropRef.current.onpointermove = null;
+
+    const elementRect = cropRef.current.getBoundingClientRect();
+
+    /* Resize crop container to fit image container bounds */
+    if (isBottomRightCorner(elementRect.right, elementRect.bottom, e.clientX, e.clientY)) {
+      const bottomDiff = elementRect.bottom - containerRect.current.bottom;
+      const rightDiff = elementRect.right - containerRect.current.right;
+
+      if (rightDiff > 0) {
+        cropRef.current.style.width = `${(elementRect.width - rightDiff).toString()}px`;
+      }
+      if (bottomDiff > 0) {
+        cropRef.current.style.height = `${(elementRect.height - bottomDiff).toString()}px`;
+      }
+    }
   };
 
   const slide: GlobalEventHandlers["onpointermove"] = (e) => {
-    if (ref.current && containerRect.current) {
-      const {
-        left: containerLeft,
-        top: containerTop,
-        right: containerRight,
-        bottom: containerBottom,
-      } = containerRect.current;
+    if (!cropRef.current || !containerRect.current) {
+      return;
+    }
+    const {
+      left: containerLeft,
+      top: containerTop,
+      right: containerRight,
+      bottom: containerBottom,
+    } = containerRect.current;
 
-      const elementRect = ref.current.getBoundingClientRect();
+    const elementRect = cropRef.current.getBoundingClientRect();
 
-      // calculate the new cursor position:
-      position.current.x1 = e.clientX - position.current.x0;
-      position.current.y1 = e.clientY - position.current.y0;
-      position.current.x0 = e.clientX;
-      position.current.y0 = e.clientY;
+    // calculate the new cursor position:
+    position.current.x1 = e.clientX - position.current.x0;
+    position.current.y1 = e.clientY - position.current.y0;
+    position.current.x0 = e.clientX;
+    position.current.y0 = e.clientY;
 
-      const left = elementRect.left + position.current.x1 - containerLeft;
-      const right = left + elementRect.width;
-      const top = elementRect.top + position.current.y1 - containerTop;
-      const bottom = top + elementRect.height;
+    const left = elementRect.left + position.current.x1 - containerLeft;
+    const right = left + elementRect.width;
+    const top = elementRect.top + position.current.y1 - containerTop;
+    const bottom = top + elementRect.height;
 
-      // prevent mask overflow container
-      if (top >= 0 && bottom + containerTop <= containerBottom) {
-        ref.current.style.top = `${top.toString()}px`;
-      }
-      if (left >= 0 && right + containerLeft <= containerRight) {
-        ref.current.style.left = `${left.toString()}px`;
-      }
+    // prevent mask overflow container
+    if (top >= 0 && bottom + containerTop <= containerBottom) {
+      cropRef.current.style.top = `${top.toString()}px`;
+    }
+    if (left >= 0 && right + containerLeft <= containerRight) {
+      cropRef.current.style.left = `${left.toString()}px`;
     }
   };
 
   useEffect(() => {
-    if (ref.current) {
-      containerRect.current = ref.current?.getBoundingClientRect();
+    if (cropRef.current) {
+      containerRect.current = cropRef.current.getBoundingClientRect();
     }
   }, []);
+
+  useImperativeHandle(
+    ref,
+    () => getCropMaskRef(cropRef, containerRect)
+  );
 
   return (
     <Box
       id={CROP_MASK_ID}
-      ref={ref}
+      ref={cropRef}
       sx={containerStyles}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
     >
-      {/* TODO Add divider 2 horizontal 2 vertical */}
-      <AspectRatioIcon sx={{
-        position: "absolute",
-        bottom: -3,
-        right: -2
-      }}
-      />
+      <UnfoldMoreIcon sx={resizeImageStyles} />
     </Box>
   );
 };

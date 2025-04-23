@@ -8,7 +8,9 @@ export const containerStyles: SxProps = {
   justifyContent: "center",
   alignItems: "center",
   gap: "8px",
-  cursor: "pointer"
+  cursor: "pointer",
+  width: "500px",
+  height: "500px"
 };
 
 export const iconStyles: SxProps = {
