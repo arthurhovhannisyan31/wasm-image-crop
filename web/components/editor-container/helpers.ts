@@ -35,7 +35,7 @@ export const imageFileValidation = (
 };
 
 export const processFiles = (
-  setRawImageData: (val: string | undefined) => void,
+  setRawFileObject: (file: File) => void,
   setProcessedImageData: (val: string | undefined) => void,
   setRawImageElement: (val: HTMLImageElement) => void
 ) => async (
@@ -52,11 +52,28 @@ export const processFiles = (
     const imageData = await convertFileToDataURL(files[0]);
     const imageElement = await createImage(imageData);
 
-    setRawImageData(imageElement.src);
+    setRawFileObject(files[0]);
     setRawImageElement(imageElement);
     setProcessedImageData(undefined);
   } catch (e) {
     console.log(e);
     console.log(errorsDict.fileParsing);
   }
+};
+
+export const downloadImg = async (
+  imageBase64: string,
+  originalFile: File
+): Promise<void> => {
+  const response = await fetch(imageBase64);
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+
+  const [oldName, extension]: string[] = originalFile.name.split(".");
+  const name = `${oldName}-crop.${extension}`;
+
+  a.href = url;
+  a.download = name;
+  a.click();
 };
