@@ -18,7 +18,7 @@ module.exports = {
     },
   },
   output: {
-    path: path.resolve("./public"),
+    path: path.resolve("dist"),
     publicPath: "",
   },
   resolve: {

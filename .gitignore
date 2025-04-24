@@ -25,3 +25,4 @@ yarn-error.log*
 
 # local
 notes.txt
+.env
