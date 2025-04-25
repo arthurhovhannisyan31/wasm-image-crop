@@ -50,7 +50,7 @@ export const DnDPlaceholder: FC<DndPlaceholderProps> = ({
         Drag and drop or click here
       </Typography>
       <Typography variant="caption" color="grey">
-        to upload your image (max 2 MiB)
+        to upload your image (max 10 MiB)
       </Typography>
     </Box>
   );

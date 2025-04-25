@@ -5,7 +5,7 @@ const path = require("path");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const webpack = require("webpack");
 
-require("dotenv").config({ path: ".env" });
+require("dotenv").config();
 
 /** @type { import('webpack').Configuration } */
 module.exports = {
