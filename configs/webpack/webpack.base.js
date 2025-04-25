@@ -8,7 +8,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 
-const isProd = process.env.__PROD__;
+const isProd = process.env.NODE_ENV === "production";
 const hash = isProd ? "contenthash:20" : "fullhash";
 
 /** @type { import('webpack').Configuration } */
@@ -65,7 +65,7 @@ module.exports = {
       favicon: path.resolve("public", "favicon.ico"),
     }),
     new DefinePlugin({
-      "process.env": JSON.stringify(dotenv.parsed),
+      "process.env": JSON.stringify(isProd ? process.env : dotenv.parsed),
     }),
   ],
   resolve: {
