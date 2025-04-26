@@ -7,10 +7,10 @@ __metadata:
 
 "@arthurhovhannisyan31/simple-service-worker@github:arthurhovhannisyan31/simple-service-worker":
   version: 1.0.0
-  resolution: "@arthurhovhannisyan31/simple-service-worker@https://github.com/arthurhovhannisyan31/simple-service-worker.git#commit=f5a75f41b75ac26cde5de7a73316c864c15d9ae8"
+  resolution: "@arthurhovhannisyan31/simple-service-worker@https://github.com/arthurhovhannisyan31/simple-service-worker.git#commit=9c502dbe21175f4574e90e464208d69155e5a9ab"
   dependencies:
     ua-parser-js: "npm:^2.0.3"
-  checksum: 10/49b671765215e6876310a93c1d7d015b570ef2822543ea2c1f3780e6d82fd4a5d25fee88605db4f4e392bce69fc10126784d9dfd6c7b9be53e8b730d0e3ee99c
+  checksum: 10/88dd25bc232925a072de685bab7b0ba89a13e314eeb22ef0c104448445407527f737a5e65b61dd5c600c7ac7c7233363fa442e3d5d06f6a5049691957e2f9bba
   languageName: node
   linkType: hard
 

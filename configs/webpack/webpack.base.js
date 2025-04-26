@@ -9,7 +9,7 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 
 const isProd = process.env.NODE_ENV === "production";
-const hash = isProd ? "contenthash:20" : "fullhash";
+const hash = "contenthash:20";
 
 /** @type { import('webpack').Configuration } */
 module.exports = {
