@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-import { initSw, isSWRegistrationValid, type SWManager } from "@arthurhovhannisyan31/simple-service-worker";
+import { isSWRegistrationValid, SWManager } from "@arthurhovhannisyan31/simple-service-worker";
 
 import { swEnabled } from "lib/constants";
 
@@ -11,12 +11,18 @@ export const useInitSW = (): void => {
     if (!isSWRegistrationValid() || swManagerRef.current) return;
 
     const init = async (): Promise<void> => {
-      const swManager = await initSw(swEnabled);
+      const swManager = await SWManager.init({
+        enabled: swEnabled,
+        postMessage: (action: AnyArray) => {
+          console.log(action);
+        }
+      });
 
       if (swManager) {
         swManagerRef.current = swManager;
       }
     };
+
     init();
   }, []);
 };
