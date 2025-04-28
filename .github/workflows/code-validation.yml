@@ -30,12 +30,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install NodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.9.0
-      - run: |
-          corepack enable
+      - name: Setup NodeJS
+        uses: ./.github/actions/setup-node
       - name: Restore dependencies
         id: restore-dependencies
         uses: actions/cache@v4
