@@ -4,6 +4,9 @@
 <a href="https://wasm-image-crop.vercel.app/">Deployment link</a>
 </div>
 
+
+![Vercel](https://vercelbadge.vercel.app/api/arthurhovhannisyan31/wasm-image-crop?style=for-the-badge)
+
 ## Overview
 ___
 Project utilize WebAssembly module written in Rust for image data processing.
