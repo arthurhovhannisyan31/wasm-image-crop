@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# setup sw files
-touch ./public/assets-manifest.json
+. "$(dirname "$0")/setup-sw.sh"
 
 __PROD__=true
 yarn webpack --config configs/webpack/webpack.prod.js
