@@ -2,10 +2,11 @@
 
 const path = require("path");
 
+const dotenv = require("dotenv").config();
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const webpack = require("webpack");
 
-require("dotenv").config();
+const isProd = process.env.NODE_ENV === "production";
 
 /** @type { import('webpack').Configuration } */
 module.exports = {
@@ -48,7 +49,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env": JSON.stringify(process.env),
+      "process.env": JSON.stringify(isProd ? process.env : dotenv.parsed),
     }),
   ],
 };

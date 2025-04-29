@@ -13,9 +13,9 @@ export const useInitSW = (): void => {
     const init = async (): Promise<void> => {
       const swManager = await SWManager.init({
         enabled: swEnabled,
-        postMessage: (action: AnyArray) => {
+        postMessage: (action) => {
           console.log(action);
-        }
+        },
       });
 
       if (swManager) {

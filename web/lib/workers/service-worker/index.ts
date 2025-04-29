@@ -1,6 +1,6 @@
 import { MainSW, type AssetsManifest } from "@arthurhovhannisyan31/simple-service-worker";
 
-import { assetsPath, staticAssetsPath, debugMode, cacheName } from "lib/constants";
+import { assetsPath, debugMode, cacheName } from "lib/constants";
 
 import assetsManifest from "../../../../public/assets-manifest.json";
 
@@ -12,7 +12,6 @@ new MainSW(
     assetsPath,
     cacheName,
     debugMode,
-    staticAssetsPath,
   });
 
 export default {} as ServiceWorker;
