@@ -18,7 +18,7 @@
     "types": "NODE_OPTIONS=--max-old-space-size=8196 tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@arthurhovhannisyan31/simple-service-worker": "github:arthurhovhannisyan31/simple-service-worker",
+    "@arthurhovhannisyan31/simple-service-worker": "^1.0.2",
     "@emotion/react": "^11.14.0",
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.14.0",
