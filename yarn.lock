@@ -5,12 +5,12 @@ __metadata:
   version: 8
   cacheKey: 10
 
-"@arthurhovhannisyan31/simple-service-worker@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "@arthurhovhannisyan31/simple-service-worker@npm:1.0.4::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40arthurhovhannisyan31%2Fsimple-service-worker%2F1.0.4%2F9619693a642af5df2056f1dfe33d7c5a995c3ba8"
+"@arthurhovhannisyan31/simple-service-worker@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "@arthurhovhannisyan31/simple-service-worker@npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40arthurhovhannisyan31%2Fsimple-service-worker%2F1.0.5%2F4fdd7744006c8cca16e50925012133d322894e53"
   dependencies:
     ua-parser-js: "npm:^2.0.3"
-  checksum: 10/23222a203af8b388657693bbe57eda91b78ea32b85ee8acd1e1d83b8c9f95f6f391473a1fae833ec7d8e851091d22fb70db8cbb8add79cd71bab44de0c1f8247
+  checksum: 10/402e2d325f6608da00a119e9a5df8d982ab9d4375de27e48a4be023eb4a95e421ab956d956bd58a6ac2d6279621828cb1de29ad1cbb2d9a76a36a4276987e829
   languageName: node
   linkType: hard
 
@@ -7944,7 +7944,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "wasm-image-crop@workspace:."
   dependencies:
-    "@arthurhovhannisyan31/simple-service-worker": "npm:^1.0.4"
+    "@arthurhovhannisyan31/simple-service-worker": "npm:^1.0.5"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/server": "npm:^11.11.0"
     "@emotion/styled": "npm:^11.14.0"
