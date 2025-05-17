@@ -1,6 +1,6 @@
 {
   "name": "wasm-image-crop",
-  "packageManager": "yarn@4.7.0",
+  "packageManager": "yarn@4.9.1",
   "engines": {
     "node": "^22.9.0"
   },
