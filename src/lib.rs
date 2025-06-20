@@ -1,5 +1,5 @@
 use base64::prelude::*;
-use image::{load_from_memory, DynamicImage, GenericImageView, ImageFormat};
+use image::{DynamicImage, GenericImageView, ImageFormat, load_from_memory};
 use std::io::Cursor;
 use wasm_bindgen::prelude::wasm_bindgen;
 use web_sys::console::log_1 as log;
