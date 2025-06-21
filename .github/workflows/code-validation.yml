@@ -22,10 +22,11 @@ jobs:
           cargo update
       - name: Validate code
         run: |
-          cargo check
+          cargo check --quiet
       - name: Validate linters
         run: |
           ./configs/scripts/cargo-fmt.sh
+          cargo clippy --all-features --all-targets --quiet
 
   js-code-validation:
     name: JS validation

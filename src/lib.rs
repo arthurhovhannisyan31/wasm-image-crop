@@ -9,6 +9,7 @@ extern "C" {
   fn alert(s: &str);
 }
 
+#[allow(clippy::too_many_arguments)]
 fn apply_image_filters(
   img: &mut DynamicImage,
   grayscale_flag: bool,
@@ -76,6 +77,7 @@ fn apply_image_filters(
   }
 }
 
+#[allow(clippy::too_many_arguments)]
 #[wasm_bindgen]
 pub fn process_image(
   encoded_file: &str,
