@@ -1,3 +1,7 @@
+#![warn(missing_docs)]
+
+//! Image processing module which is exposed to JS environment
+
 use base64::prelude::*;
 use image::{DynamicImage, GenericImageView, ImageFormat, load_from_memory};
 use std::io::Cursor;
@@ -9,6 +13,7 @@ extern "C" {
   fn alert(s: &str);
 }
 
+/// Function applies image filters to image instance reference
 #[allow(clippy::too_many_arguments)]
 fn apply_image_filters(
   img: &mut DynamicImage,
@@ -77,6 +82,16 @@ fn apply_image_filters(
   }
 }
 
+/// Becomes a wasm module
+///
+/// Functions does basic operation on image file like decoding, processing filters and returns
+/// processed encoded result
+///
+/// Usage:
+/// ```typescript
+/// const wasm = await import("path_to_wasm_pkg");
+/// wasm.process_image(...args);
+/// ```
 #[allow(clippy::too_many_arguments)]
 #[wasm_bindgen]
 pub fn process_image(

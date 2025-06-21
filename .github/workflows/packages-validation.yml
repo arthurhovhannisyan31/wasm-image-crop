@@ -1,0 +1,22 @@
+name: Validate Packages
+on:
+  push:
+    branches:
+      - '*'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cargo-audit:
+    name: Cargo packages audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Cargo audit
+        run: |
+          cargo install cargo-audit
+      - name: Validate code
+        run: |
+          cargo audit      

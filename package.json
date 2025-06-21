@@ -15,7 +15,8 @@
     "lint": "yarn eslint '**/*.{js,ts,tsx}' --cache --quiet",
     "lint:warn": "yarn lint --max-warnings 100",
     "lint:staged": "./configs/scripts/lint-staged.sh",
-    "types": "NODE_OPTIONS=--max-old-space-size=8196 tsc -p tsconfig.json --noEmit"
+    "types": "NODE_OPTIONS=--max-old-space-size=8196 tsc -p tsconfig.json --noEmit",
+    "cargo-docs": "cargo doc --open --no-deps"
   },
   "dependencies": {
     "@arthurhovhannisyan31/simple-service-worker": "^1.0.6",

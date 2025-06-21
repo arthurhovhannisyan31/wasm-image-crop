@@ -4,4 +4,4 @@
 
 printf "⚠️ Run pre-push checks\n\n"
 
-validate "cargo check" "configs/scripts/cargo-fmt.sh" "yarn types" "yarn lint"
+validate "cargo check" "configs/scripts/cargo-fmt.sh" "cargo audit" "yarn types" "yarn lint"
